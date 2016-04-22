@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    
+
+    <title>
+      浅谈iOS中的视图优化 | kuailejim&#39;s Dev 
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    
+      <meta name="author" content="Jim">
+    
+    
+
+    <meta name="description" content="引言：让我们来思考几个问题，你开发过的产品，它还有可以优化的地方吗？能增加它的帧率吗？能减少多余的CPU计算吗？是不是存在多余的GPU渲染？业务这点工作量对于越来越强大的设备面前显得微不足道，但作为一个细心的开发者，我觉得很有必要来谈谈iOS中的视图优化。
+
+本文从开发者最容易犯错的地方出发，结合例子，从以下几个角度阐述如何进行视图优化：
+
+Color Blended Layers
+Color">
+<meta property="og:type" content="article">
+<meta property="og:title" content="浅谈iOS中的视图优化 | kuailejim's Dev">
+<meta property="og:url" content="http://kuailejim.com/2016/04/22/浅谈iOS中的视图优化/index.html">
+<meta property="og:site_name" content="kuailejim's Dev">
+<meta property="og:description" content="引言：让我们来思考几个问题，你开发过的产品，它还有可以优化的地方吗？能增加它的帧率吗？能减少多余的CPU计算吗？是不是存在多余的GPU渲染？业务这点工作量对于越来越强大的设备面前显得微不足道，但作为一个细心的开发者，我觉得很有必要来谈谈iOS中的视图优化。
+
+本文从开发者最容易犯错的地方出发，结合例子，从以下几个角度阐述如何进行视图优化：
+
+Color Blended Layers
+Color">
+<meta property="og:image" content="http://kuailejim.com/2016/04/22/浅谈iOS中的视图优化/1.png">
+<meta property="og:image" content="http://kuailejim.com/2016/04/22/浅谈iOS中的视图优化/2.png">
+<meta property="og:image" content="http://kuailejim.com/2016/04/22/浅谈iOS中的视图优化/3.png">
+<meta property="og:image" content="http://kuailejim.com/2016/04/22/浅谈iOS中的视图优化/4.png">
+<meta property="og:image" content="http://kuailejim.com/2016/04/22/浅谈iOS中的视图优化/5.png">
+<meta property="og:image" content="http://kuailejim.com/2016/04/22/浅谈iOS中的视图优化/6.png">
+<meta property="og:image" content="http://kuailejim.com/2016/04/22/浅谈iOS中的视图优化/7.png">
+<meta property="og:image" content="http://kuailejim.com/2016/04/22/浅谈iOS中的视图优化/8.png">
+<meta property="og:updated_time" content="2016-04-22T06:43:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="浅谈iOS中的视图优化 | kuailejim's Dev">
+<meta name="twitter:description" content="引言：让我们来思考几个问题，你开发过的产品，它还有可以优化的地方吗？能增加它的帧率吗？能减少多余的CPU计算吗？是不是存在多余的GPU渲染？业务这点工作量对于越来越强大的设备面前显得微不足道，但作为一个细心的开发者，我觉得很有必要来谈谈iOS中的视图优化。
+
+本文从开发者最容易犯错的地方出发，结合例子，从以下几个角度阐述如何进行视图优化：
+
+Color Blended Layers
+Color">
+<meta name="twitter:image" content="http://kuailejim.com/2016/04/22/浅谈iOS中的视图优化/1.png">
+    
+    
+    
+      <link rel="icon" type="image/x-icon" href="/favicon.png">
+    
+    <link rel="stylesheet" href="/css/uno.css">
+    <link rel="stylesheet" href="/css/highlight.css">
+    <link rel="stylesheet" href="/css/archive.css">
+    <link rel="stylesheet" href="/css/china-social-icon.css">
+
+</head>
+<body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="icon icon-list btn-mobile-menu__icon"></i>
+        <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+
+<header class="panel-cover panel-cover--collapsed">
+
+
+  <div class="panel-main">
+
+  
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage">kuailejim&#39;s Dev</a></h1>
+        <hr class="panel-cover__divider" />
+
+        
+        <p class="panel-cover__description">
+          我是黄建敏(@kuailejim) -&gt; iOS Developer &amp;&amp; Crazy Driver.
+        </p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+
+        <div class="navigation-wrapper">
+
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+
+              
+                
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">博客</a></li>
+              
+                
+                <li class="navigation__item"><a href="http://www.jianshu.com/users/40e4dced948f" title="" class="">简书</a></li>
+              
+
+            </ul>
+          </nav>
+
+          <!-- ----------------------------
+To add a new social icon simply duplicate one of the list items from below
+and change the class in the <i> tag to match the desired social network
+and then add your link to the <a>. Here is a full list of social network
+classes that you can use:
+
+    icon-social-500px
+    icon-social-behance
+    icon-social-delicious
+    icon-social-designer-news
+    icon-social-deviant-art
+    icon-social-digg
+    icon-social-dribbble
+    icon-social-facebook
+    icon-social-flickr
+    icon-social-forrst
+    icon-social-foursquare
+    icon-social-github
+    icon-social-google-plus
+    icon-social-hi5
+    icon-social-instagram
+    icon-social-lastfm
+    icon-social-linkedin
+    icon-social-medium
+    icon-social-myspace
+    icon-social-path
+    icon-social-pinterest
+    icon-social-rdio
+    icon-social-reddit
+    icon-social-skype
+    icon-social-spotify
+    icon-social-stack-overflow
+    icon-social-steam
+    icon-social-stumbleupon
+    icon-social-treehouse
+    icon-social-tumblr
+    icon-social-twitter
+    icon-social-vimeo
+    icon-social-xbox
+    icon-social-yelp
+    icon-social-youtube
+    icon-social-zerply
+    icon-mail
+
+-------------------------------->
+
+<!-- add social info here -->
+
+
+
+<nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+    
+      <!-- Github -->
+      <li class="navigation__item">
+        <a href="https://github.com/kuailejim" title="Huno on GitHub">
+          <i class='icon icon-social-github'></i>
+          <span class="label">GitHub</span>
+        </a>
+      </li>
+    
+
+    <!-- China social icon -->
+
+      <li class="navigation__item">
+        <a href="http://weibo.com/huangjim/" title="">
+          <i class='icon cs-icon-weibo'></i>
+          <span class="label">Weibo</span>
+        </a>
+      </li>
+
+  </ul>
+</nav>
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay"></div>
+  </div>
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner entry">
+            
+
+<article class="post-container post-container--single">
+
+  <header class="post-header">
+    
+    <h1 class="post-title">浅谈iOS中的视图优化</h1>
+
+    
+
+    <div class="post-meta">
+      <time datetime="2016-04-22" class="post-meta__date date">2016-04-22</time> 
+
+      <span class="post-meta__tags tags">
+
+          
+
+          
+
+      </span>
+    </div>
+    
+    
+
+  </header>
+
+  <section id="post-content" class="article-content post">
+    <blockquote>
+<p>引言：<br>让我们来思考几个问题，你开发过的产品，它还有可以优化的地方吗？能增加它的帧率吗？能减少多余的CPU计算吗？是不是存在多余的GPU渲染？业务这点工作量对于越来越强大的设备面前显得微不足道，但作为一个细心的开发者，我觉得很有必要来谈谈iOS中的视图优化。</p>
+</blockquote>
+<p>本文从开发者最容易犯错的地方出发，结合例子，从以下几个角度阐述如何进行视图优化：</p>
+<ul>
+<li>Color Blended Layers</li>
+<li>Color Copied Images</li>
+<li>Color Misaligned Images</li>
+<li>Color Offscreen-Rendered</li>
+</ul>
+<p>这个4个选项，可以从模拟器的Debug选项中看到</p>
+<img src="/2016/04/22/浅谈iOS中的视图优化/1.png" alt="1.png" title="">
+<p>别急，我们一个个来看，首先是<strong>Color Blended Layers</strong>。</p>
+<p>##Color Blended Layers</p>
+<p>官方是这么描述它的：</p>
+<blockquote>
+<p>Shows blended view layers. Multiple view layers that are drawn on top of each other with blending enabled are highlighted in red. Reducing the amount of red in your app when this option is selected can dramatically improve your app’s performance. Blended view layers often cause slow table scrolling.</p>
+</blockquote>
+<p>简单来说，屏幕上的每个像素点的颜色是由当前像素点上的多层layer(如果存在)共同决定的，GPU会进行计算出混合颜色的RGB值，最终显示在屏幕上。而这需要让GPU计算，所以我们要尽量<strong>避免设置alpha</strong>，这样GPU会忽略下面所有的layer，节约计算量。</p>
+<p>下面让我们来看一下设置alpha的效果，上面的灰色小块是透明的。<br><img src="/2016/04/22/浅谈iOS中的视图优化/2.png" alt="2.png" title=""></p>
+<img src="/2016/04/22/浅谈iOS中的视图优化/3.png" alt="3.png" title="">
+<p>效果很明显，设置了透明的view会让GPU计算图层混合后的最终结果。</p>
+<p>我想再提一下<strong>opaque</strong>这个属性，网上普遍认为<code>view.opaque = YES</code>，GPU就不会进行图层混合计算了。而这个结论是<strong>错误</strong>的，其实<code>view.opaque</code>事实上并没什么卵用。<br>如果你真的想达到这个效果，可以用<code>layer.opaque</code>,这个才是<strong>正确的做法</strong>。</p>
+<p>##Color Copied Images</p>
+<blockquote>
+<p>“If an image is in a color format that the GPU can not directly work with, it will be converted in the CPU.” </p>
+</blockquote>
+<p><strong>Session 419 WWDC 2014</strong>中详细介绍了这货，其实这个东西跟开发者并没什么关系，遇到这种情况，我们大可以摔锅给设计（当然你乱做优化导致图片颜色格式改变，那就没办法了）。</p>
+<p>简而言之，苹果的GPU只解析<strong>32bit</strong>的颜色格式，记住是<strong>32bit</strong>。<br>如果你放一张图片，而它的颜色格式却不是<strong>32bit</strong>，CPU会先进行颜色格式转换，再让GPU渲染。乖乖的CPU就默默做了这个多余的工作。</p>
+<p>所以给你两个选择：</p>
+<ul>
+<li>让设计湿都给你切<strong>32bit</strong>的图</li>
+<li>自己去跑个异步线程来转换颜色去吧，不要去堵塞本来就压力很大的主线程！</li>
+</ul>
+<p>你选哪个？当然是让设计湿切图啦，我才不愿意多写代码。<br>而且于情于理，就算异步转换颜色，也会<strong>导致性能损耗，比如电量增多，发热强变大等等等等</strong>。</p>
+<p>上demo：</p>
+<img src="/2016/04/22/浅谈iOS中的视图优化/4.png" alt="4.png" title="">
+<img src="/2016/04/22/浅谈iOS中的视图优化/5.png" alt="5.png" title="">
+<p>两个一样的图，仅仅是采用了不同颜色格式，上面是<strong>32bit</strong>，下面是<strong>8bit</strong>，于是乎，<strong>8bit的会导致Color Copied Images8</strong>，让CPU多运算了。</p>
+<p>##Color Misaligned Images</p>
+<blockquote>
+<p>Misaligned Image表示要绘制的点无法直接映射到频幕上的像素点，此时系统需要对相邻的像素点做anti-aliasing反锯齿计算，增加了图形负担，通常这种问题出在对某些View的Frame重新计算和设置时产生的。</p>
+</blockquote>
+<p>很简单，不要出现<strong>image size</strong>与<strong>imageView size</strong>不同的情况，这样会触发反锯齿计算，增加性能损耗。</p>
+<p>上demo：</p>
+<img src="/2016/04/22/浅谈iOS中的视图优化/6.png" alt="6.png" title="">
+<p>一下就好看出来，下面的图片尺寸不合适。</p>
+<p>所以，实际开发中，本地的图片比较好把控，只需要写好对应的尺寸就好了，但是<strong>对于download下来的图片，可以在加载完后进行size处理，以满足imageView frame</strong>。特别是对于很多app，有大量的tableview，如果进行处理，则会大幅度提高流畅度。</p>
+<p>##Color Offscreen-Rendered<br>最后就是<strong>Offscreen-Rendered（离屏渲染）</strong>了。</p>
+<p>这个东西讲起来感觉非常复杂，我觉得只需要知道，离屏渲染会导致CPU在后台保存一份bitmap，所以会导致CPU多余运算。</p>
+<p>而避免的方式则是避免去做触发的动作：</p>
+<ul>
+<li>重写drawRect方法</li>
+<li>masksToBounds</li>
+<li>其他一些手动触发离屏渲染的动作</li>
+</ul>
+<p>最后看个demo：</p>
+<img src="/2016/04/22/浅谈iOS中的视图优化/7.png" alt="7.png" title="">
+<img src="/2016/04/22/浅谈iOS中的视图优化/8.png" alt="8.png" title="">
+<p>如图所示，触发了离屏渲染。</p>
+<p>##总结：<br>如果开发阶段都注意到这些细节，那么我觉得性能将不会是很大的问题了。</p>
+
+  </section>
+
+  
+  
+</article>
+
+
+            <footer class="footer">
+
+    <span class="footer__copyright">Stay Hungry, Stay Foolish.</span>
+    
+</footer>
+        </div>
+    </div>
+
+    <!-- js files -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/scale.fix.js"></script>
+    
+
+    
+
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript"> 
+        $(document).ready(function(){
+            MathJax.Hub.Config({ 
+                tex2jax: {inlineMath: [['[latex]','[/latex]'], ['\\(','\\)']]} 
+            });
+        });
+    </script>
+
+
+    
+
+    <script src="/js/awesome-toc.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.awesome_toc({
+                overlay: true,
+                contentId: "post-content",
+            });
+        });
+    </script>
+
+
+    
+    
+
+    <script src="/js/jquery.githubRepoWidget.min.js"></script>
+
+
+    <!--kill ie6 -->
+<!--[if IE 6]>
+  <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
+<![endif]-->
+
+</body>
+</html>

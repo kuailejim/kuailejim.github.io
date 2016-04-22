@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    
+
+    <title>
+      如何打造一个高性能Hybrid app | kuailejim&#39;s Dev 
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    
+      <meta name="author" content="Jim">
+    
+    
+
+    <meta name="description" content="引言：在多元化的今天，一个热门的移动app，或多或少都会有内在H5在其中。而对于一个有很多运营场景的app来说，这种情况更常见了。试想一下，如果在一个公司，存在很多native和H5同时需要开发的页面，为了节省开发成本，此时如果只开发H5，就需要考虑native的体验了，而这就是本文的目的，如何让native端拥有像加载本地页面一样的速度去加载H5。
+
+在app内加载H5速度慢一直是客户端开发的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何打造一个高性能Hybrid app | kuailejim's Dev">
+<meta property="og:url" content="http://kuailejim.com/2016/04/22/如何打造一个高性能Hybrid-app/index.html">
+<meta property="og:site_name" content="kuailejim's Dev">
+<meta property="og:description" content="引言：在多元化的今天，一个热门的移动app，或多或少都会有内在H5在其中。而对于一个有很多运营场景的app来说，这种情况更常见了。试想一下，如果在一个公司，存在很多native和H5同时需要开发的页面，为了节省开发成本，此时如果只开发H5，就需要考虑native的体验了，而这就是本文的目的，如何让native端拥有像加载本地页面一样的速度去加载H5。
+
+在app内加载H5速度慢一直是客户端开发的">
+<meta property="og:image" content="http://kuailejim.com/2016/04/22/如何打造一个高性能Hybrid-app/1.png">
+<meta property="og:image" content="http://kuailejim.com/2016/04/22/如何打造一个高性能Hybrid-app/2.png">
+<meta property="og:image" content="http://kuailejim.com/2016/04/22/如何打造一个高性能Hybrid-app/3.png">
+<meta property="og:updated_time" content="2016-04-22T06:35:04.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="如何打造一个高性能Hybrid app | kuailejim's Dev">
+<meta name="twitter:description" content="引言：在多元化的今天，一个热门的移动app，或多或少都会有内在H5在其中。而对于一个有很多运营场景的app来说，这种情况更常见了。试想一下，如果在一个公司，存在很多native和H5同时需要开发的页面，为了节省开发成本，此时如果只开发H5，就需要考虑native的体验了，而这就是本文的目的，如何让native端拥有像加载本地页面一样的速度去加载H5。
+
+在app内加载H5速度慢一直是客户端开发的">
+<meta name="twitter:image" content="http://kuailejim.com/2016/04/22/如何打造一个高性能Hybrid-app/1.png">
+    
+    
+    
+      <link rel="icon" type="image/x-icon" href="/favicon.png">
+    
+    <link rel="stylesheet" href="/css/uno.css">
+    <link rel="stylesheet" href="/css/highlight.css">
+    <link rel="stylesheet" href="/css/archive.css">
+    <link rel="stylesheet" href="/css/china-social-icon.css">
+
+</head>
+<body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="icon icon-list btn-mobile-menu__icon"></i>
+        <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+
+<header class="panel-cover panel-cover--collapsed">
+
+
+  <div class="panel-main">
+
+  
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage">kuailejim&#39;s Dev</a></h1>
+        <hr class="panel-cover__divider" />
+
+        
+        <p class="panel-cover__description">
+          我是黄建敏(@kuailejim) -&gt; iOS Developer &amp;&amp; Crazy Driver.
+        </p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+
+        <div class="navigation-wrapper">
+
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+
+              
+                
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">博客</a></li>
+              
+                
+                <li class="navigation__item"><a href="http://www.jianshu.com/users/40e4dced948f" title="" class="">简书</a></li>
+              
+
+            </ul>
+          </nav>
+
+          <!-- ----------------------------
+To add a new social icon simply duplicate one of the list items from below
+and change the class in the <i> tag to match the desired social network
+and then add your link to the <a>. Here is a full list of social network
+classes that you can use:
+
+    icon-social-500px
+    icon-social-behance
+    icon-social-delicious
+    icon-social-designer-news
+    icon-social-deviant-art
+    icon-social-digg
+    icon-social-dribbble
+    icon-social-facebook
+    icon-social-flickr
+    icon-social-forrst
+    icon-social-foursquare
+    icon-social-github
+    icon-social-google-plus
+    icon-social-hi5
+    icon-social-instagram
+    icon-social-lastfm
+    icon-social-linkedin
+    icon-social-medium
+    icon-social-myspace
+    icon-social-path
+    icon-social-pinterest
+    icon-social-rdio
+    icon-social-reddit
+    icon-social-skype
+    icon-social-spotify
+    icon-social-stack-overflow
+    icon-social-steam
+    icon-social-stumbleupon
+    icon-social-treehouse
+    icon-social-tumblr
+    icon-social-twitter
+    icon-social-vimeo
+    icon-social-xbox
+    icon-social-yelp
+    icon-social-youtube
+    icon-social-zerply
+    icon-mail
+
+-------------------------------->
+
+<!-- add social info here -->
+
+
+
+<nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+    
+      <!-- Github -->
+      <li class="navigation__item">
+        <a href="https://github.com/kuailejim" title="Huno on GitHub">
+          <i class='icon icon-social-github'></i>
+          <span class="label">GitHub</span>
+        </a>
+      </li>
+    
+
+    <!-- China social icon -->
+
+      <li class="navigation__item">
+        <a href="http://weibo.com/huangjim/" title="">
+          <i class='icon cs-icon-weibo'></i>
+          <span class="label">Weibo</span>
+        </a>
+      </li>
+
+  </ul>
+</nav>
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay"></div>
+  </div>
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner entry">
+            
+
+<article class="post-container post-container--single">
+
+  <header class="post-header">
+    
+    <h1 class="post-title">如何打造一个高性能Hybrid app</h1>
+
+    
+
+    <div class="post-meta">
+      <time datetime="2016-04-22" class="post-meta__date date">2016-04-22</time> 
+
+      <span class="post-meta__tags tags">
+
+          
+
+          
+
+      </span>
+    </div>
+    
+    
+
+  </header>
+
+  <section id="post-content" class="article-content post">
+    <blockquote>
+<p><em>引言：在多元化的今天，一个热门的移动app，或多或少都会有内在H5在其中。而对于一个有很多运营场景的app来说，这种情况更常见了。试想一下，如果在一个公司，存在很多native和H5同时需要开发的页面，为了节省开发成本，此时如果只开发H5，就需要考虑native的体验了，而这就是本文的目的，<strong>如何让native端拥有像加载本地页面一样的速度去加载H5</strong>。</em></p>
+</blockquote>
+<p>在app内加载H5速度慢一直是客户端开发的痛点，抛开H5的体验本身与native就有差距不说，如果加载速度还很慢，这将会对用户体验造成巨大影响。那么像做到像native页面一样瞬间加载完H5，思路就会变得比较清晰了–<strong>提前在本地存储远程资源包</strong>。</p>
+<hr>
+<h1 id="方案选择"><a href="#方案选择" class="headerlink" title="方案选择"></a>方案选择</h1><p>从这个点出发，我们需要考虑，以怎样的形式来提前拿到资源包（css，js，html，通用的图片等），减少这些静态资源的网络请求，增加加载速度。无非就是一下两点：</p>
+<p><strong>1.将资源包在app打包阶段直接植入</strong></p>
+<p><strong>2.在运行时动态下载资源包</strong></p>
+<p>单纯从业务层来说，如果你的业务够简单，其实第一种方式已经完全满足，每次需要新增页面就重新发版嘛，虽然显得有点愚笨，但是还是能满足的。</p>
+<p>但是从长远的角度来说，我们要做到尽可能的动态化，动态化是客户端的热点，我们要做到尽量不依赖于版本更新来实现动态化。对于iOS来说，更新机制本身就非常缓慢，要通过app store的审核有时候还需要靠人品，更何况用户也不一定买账，他们不一定会更新我们的app。在这样的情况下，第二种方案就会显得更加友好。</p>
+<hr>
+<h1 id="设计加载流程"><a href="#设计加载流程" class="headerlink" title="设计加载流程"></a>设计加载流程</h1><p>那么，该怎么设计一套完整的解决方案来满足运行时动态下载资源包呢。</p>
+<p>抽出细节，大体上可以归结为下图所示的结构图：</p>
+<img src="/2016/04/22/如何打造一个高性能Hybrid-app/1.png" alt="1.png" title="">
+<p>我来解释下这个图，我是建立在客户端已经实现socket层协议，所以能与server保持长连接以至于server能主动push数据的情况，实现这种协议蛮复杂的。实际上如果没有这个协议，那就需要client找时机主动去server请求（app启动时请求一次？或者是每隔一段时间请求一次，取决于你），本文以后者为例。</p>
+<p>下面我来演示下一个完整的下载新资源包的过程：</p>
+<p>1.运营小妹觉得某节日要到了，需要发布一个新的页面，然后在运营后台生成资源包，运营后台会自动更新config，其中包括资源包的version，是否强制关闭加载本地资源包（降级策略，防止这个组件本身有BUG），还有一些hotpatch脚本。并且将资源包根据里面的内容部署到remote database。</p>
+<p>2.在合适的时机，client发起http请求向server查询是否有新版本的资源包，并带上本地的config。</p>
+<p>3.server根据config里的选项，比对从client拿到的config，发现客户端是旧版本的config，OK，则下发新的config给client，并且发送从database里拿到的资源包（为了加快速度，可以部署到CDN）。</p>
+<p>4.client拿到最新的资源包后，在本地进行解密，解压等操作，并映射成对应ULR相对于本地的local file url。比如：<a href="http://www.baidu.com这个网址下的静态资源文件在本地的的file://dsalkfjsldfjalsd/目录下。" target="_blank" rel="external">http://www.baidu.com这个网址下的静态资源文件在本地的的file://dsalkfjsldfjalsd/目录下。</a></p>
+<p>至此，已经完成资源包的下载。</p>
+<hr>
+<h1 id="拦截并加载本地资源包"><a href="#拦截并加载本地资源包" class="headerlink" title="拦截并加载本地资源包"></a>拦截并加载本地资源包</h1><p>那么有了资源包后，怎么能让app像native页面的速度去加载H5呢。</p>
+<p>其实原理就是对H5请求进行拦截，如果本地已经有对应的静态资源文件，则直接加载，这样就能达到“<strong>秒开</strong>”webview的效果。</p>
+<p>对于iOS而言，这就需要用到NSURLProtocol这个神器了。接下来，分析下它到底是什么东西，我们怎么利用它达到上述效果。</p>
+<blockquote>
+<p>NSURLProtocol能够让你去重新定义苹果的<a href="https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/URLLoadingSystem/URLLoadingSystem.html#//apple_ref/doc/uid/10000165-BCICJDHA" target="_blank" rel="external">URL加载系统</a>(URL Loading System)的行为，URL Loading System里有许多类用于处理URL请求，比如NSURL，NSURLRequest，NSURLConnection和NSURLSession等。当URL Loading System使用NSURLRequest去获取资源的时候，它会创建一个NSURLProtocol子类的实例，你不应该直接实例化一个NSURLProtocol，NSURLProtocol看起来像是一个协议，但其实这是一个类，而且必须使用该类的子类，并且需要被注册。 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;</p>
+<p>–从网上拷贝的</p>
+</blockquote>
+<p>换句话说，NSURLProtocol能拦截所有当前app下的网络请求，并且能自定义地进行处理。</p>
+<p>废物不多说，上代码：</p>
+<img src="/2016/04/22/如何打造一个高性能Hybrid-app/2.png" alt="2.png" title="">
+<p>这里只介绍与我们需求相关的NSURLProtocol方法。</p>
+<p>搞了这么多，其实最核心的就是前四个方法：</p>
+<p><em>+ (BOOL)canInitWithRequest:(NSURLRequest *)request</em></p>
+<p>这个方法的作用是判断当前protocol是否要对这个request进行处理（所有的网络请求都会走到这里，所以我们只需要对我们产生的request进行处理即可）。</p>
+<p><em>+ (NSURLRequest <em>)canonicalRequestForRequest:(NSURLRequest </em>)request</em></p>
+<p>这个方法其实很强大，它可以对request进行预处理，比如对header加一些东西什么的，我们这里没什么要改的，所以直接返回request就好了。</p>
+<p><em>- (void)startLoading</em></p>
+<p>重点是这个方法，我们这里需要做一件事，就是自己拼装httpResponse，并且返回给url load system，然后到了webview那一层，会收到response，对于webview而言，加载本地和走网络拿到的response是完全一样的。所以上述代码展示了如何拼装一个httpResponse，当组装完成后，需要调用self.client将数据传出去。</p>
+<p>何为self.client，这个东西其实就是protocol与url load system交互的一个对象，系统提供给我们的，这样理解就够了。</p>
+<p>需要注意的是，细心的读者会看到else里会有一段代码：</p>
+<p><em>[NSURLProtocol setProperty:@YES forKey:WDHybridResourceProtocolHandledKey inRequest:newRequest];
+</em></p>
+<p>这个是干什么用的？else的作用是当本地不存在这个文件时，则主动重新发请求，此时又会调用canInitWithRequest，如果不设置flag，则会无限递归了。所以你懂得。</p>
+<p>当然，重新发请求自然要实现NSURLConnectionDelegate。</p>
+<hr>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>至此，如何快速加载H5已经全部介绍完毕。</p>
+<p>附上前后加载速度对比：</p>
+<img src="/2016/04/22/如何打造一个高性能Hybrid-app/3.png" alt="3.png" title="">
+<p>好的，下次再见！</p>
+<p>欢迎大家关注微博<a href="http://weibo.com/2162473223" target="_blank" rel="external">@kuailejim</a>，我会经常在上面分享一些大家感兴趣的东西。</p>
+
+  </section>
+
+  
+  
+</article>
+
+
+            <footer class="footer">
+
+    <span class="footer__copyright">Stay Hungry, Stay Foolish.</span>
+    
+</footer>
+        </div>
+    </div>
+
+    <!-- js files -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/scale.fix.js"></script>
+    
+
+    
+
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript"> 
+        $(document).ready(function(){
+            MathJax.Hub.Config({ 
+                tex2jax: {inlineMath: [['[latex]','[/latex]'], ['\\(','\\)']]} 
+            });
+        });
+    </script>
+
+
+    
+
+    <script src="/js/awesome-toc.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.awesome_toc({
+                overlay: true,
+                contentId: "post-content",
+            });
+        });
+    </script>
+
+
+    
+    
+
+    <script src="/js/jquery.githubRepoWidget.min.js"></script>
+
+
+    <!--kill ie6 -->
+<!--[if IE 6]>
+  <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
+<![endif]-->
+
+</body>
+</html>

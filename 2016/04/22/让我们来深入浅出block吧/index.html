@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    
+
+    <title>
+      让我们来深入浅出block吧 | kuailejim&#39;s Dev 
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    
+      <meta name="author" content="Jim">
+    
+    
+
+    <meta name="description" content="开始之前，我想先提几个问题，看看大家是否对此有疑惑。唐巧已经写过一篇对block很有研究的文章，大家可以去看看（本文会部分引用巧哥文中出现的图和代码）。在巧哥的基础上，我补充一些block相关的知识点和代码，并且概括并修正一些观点。
+1.block是什么？block是对象吗？
+2.block分为哪几种？__blcok关键字的作用？
+3.block在ARC和MRC下的区别？
+4.block的生命周">
+<meta property="og:type" content="article">
+<meta property="og:title" content="让我们来深入浅出block吧 | kuailejim's Dev">
+<meta property="og:url" content="http://kuailejim.com/2016/04/22/让我们来深入浅出block吧/index.html">
+<meta property="og:site_name" content="kuailejim's Dev">
+<meta property="og:description" content="开始之前，我想先提几个问题，看看大家是否对此有疑惑。唐巧已经写过一篇对block很有研究的文章，大家可以去看看（本文会部分引用巧哥文中出现的图和代码）。在巧哥的基础上，我补充一些block相关的知识点和代码，并且概括并修正一些观点。
+1.block是什么？block是对象吗？
+2.block分为哪几种？__blcok关键字的作用？
+3.block在ARC和MRC下的区别？
+4.block的生命周">
+<meta property="og:image" content="http://kuailejim.com/2016/04/22/让我们来深入浅出block吧/1.jpg">
+<meta property="og:image" content="http://kuailejim.com/2016/04/22/让我们来深入浅出block吧/2.png">
+<meta property="og:image" content="http://kuailejim.com/2016/04/22/让我们来深入浅出block吧/3.png">
+<meta property="og:image" content="http://kuailejim.com/2016/04/22/让我们来深入浅出block吧/4.png">
+<meta property="og:image" content="http://kuailejim.com/2016/04/22/让我们来深入浅出block吧/5.png">
+<meta property="og:image" content="http://kuailejim.com/2016/04/22/让我们来深入浅出block吧/6.png">
+<meta property="og:image" content="http://kuailejim.com/2016/04/22/让我们来深入浅出block吧/7.png">
+<meta property="og:image" content="http://kuailejim.com/2016/04/22/让我们来深入浅出block吧/8.png">
+<meta property="og:image" content="http://kuailejim.com/2016/04/22/让我们来深入浅出block吧/9.png">
+<meta property="og:image" content="http://kuailejim.com/2016/04/22/让我们来深入浅出block吧/10.png">
+<meta property="og:image" content="http://kuailejim.com/2016/04/22/让我们来深入浅出block吧/11.png">
+<meta property="og:updated_time" content="2016-04-22T06:26:07.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="让我们来深入浅出block吧 | kuailejim's Dev">
+<meta name="twitter:description" content="开始之前，我想先提几个问题，看看大家是否对此有疑惑。唐巧已经写过一篇对block很有研究的文章，大家可以去看看（本文会部分引用巧哥文中出现的图和代码）。在巧哥的基础上，我补充一些block相关的知识点和代码，并且概括并修正一些观点。
+1.block是什么？block是对象吗？
+2.block分为哪几种？__blcok关键字的作用？
+3.block在ARC和MRC下的区别？
+4.block的生命周">
+<meta name="twitter:image" content="http://kuailejim.com/2016/04/22/让我们来深入浅出block吧/1.jpg">
+    
+    
+    
+      <link rel="icon" type="image/x-icon" href="/favicon.png">
+    
+    <link rel="stylesheet" href="/css/uno.css">
+    <link rel="stylesheet" href="/css/highlight.css">
+    <link rel="stylesheet" href="/css/archive.css">
+    <link rel="stylesheet" href="/css/china-social-icon.css">
+
+</head>
+<body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="icon icon-list btn-mobile-menu__icon"></i>
+        <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+
+<header class="panel-cover panel-cover--collapsed">
+
+
+  <div class="panel-main">
+
+  
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage">kuailejim&#39;s Dev</a></h1>
+        <hr class="panel-cover__divider" />
+
+        
+        <p class="panel-cover__description">
+          我是黄建敏(@kuailejim) -&gt; iOS Developer &amp;&amp; Crazy Driver.
+        </p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+
+        <div class="navigation-wrapper">
+
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+
+              
+                
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">博客</a></li>
+              
+                
+                <li class="navigation__item"><a href="http://www.jianshu.com/users/40e4dced948f" title="" class="">简书</a></li>
+              
+
+            </ul>
+          </nav>
+
+          <!-- ----------------------------
+To add a new social icon simply duplicate one of the list items from below
+and change the class in the <i> tag to match the desired social network
+and then add your link to the <a>. Here is a full list of social network
+classes that you can use:
+
+    icon-social-500px
+    icon-social-behance
+    icon-social-delicious
+    icon-social-designer-news
+    icon-social-deviant-art
+    icon-social-digg
+    icon-social-dribbble
+    icon-social-facebook
+    icon-social-flickr
+    icon-social-forrst
+    icon-social-foursquare
+    icon-social-github
+    icon-social-google-plus
+    icon-social-hi5
+    icon-social-instagram
+    icon-social-lastfm
+    icon-social-linkedin
+    icon-social-medium
+    icon-social-myspace
+    icon-social-path
+    icon-social-pinterest
+    icon-social-rdio
+    icon-social-reddit
+    icon-social-skype
+    icon-social-spotify
+    icon-social-stack-overflow
+    icon-social-steam
+    icon-social-stumbleupon
+    icon-social-treehouse
+    icon-social-tumblr
+    icon-social-twitter
+    icon-social-vimeo
+    icon-social-xbox
+    icon-social-yelp
+    icon-social-youtube
+    icon-social-zerply
+    icon-mail
+
+-------------------------------->
+
+<!-- add social info here -->
+
+
+
+<nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+    
+      <!-- Github -->
+      <li class="navigation__item">
+        <a href="https://github.com/kuailejim" title="Huno on GitHub">
+          <i class='icon icon-social-github'></i>
+          <span class="label">GitHub</span>
+        </a>
+      </li>
+    
+
+    <!-- China social icon -->
+
+      <li class="navigation__item">
+        <a href="http://weibo.com/huangjim/" title="">
+          <i class='icon cs-icon-weibo'></i>
+          <span class="label">Weibo</span>
+        </a>
+      </li>
+
+  </ul>
+</nav>
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay"></div>
+  </div>
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner entry">
+            
+
+<article class="post-container post-container--single">
+
+  <header class="post-header">
+    
+    <h1 class="post-title">让我们来深入浅出block吧</h1>
+
+    
+
+    <div class="post-meta">
+      <time datetime="2016-04-22" class="post-meta__date date">2016-04-22</time> 
+
+      <span class="post-meta__tags tags">
+
+          
+
+          
+
+      </span>
+    </div>
+    
+    
+
+  </header>
+
+  <section id="post-content" class="article-content post">
+    <blockquote>
+<p>开始之前，我想先提几个问题，看看大家是否对此有疑惑。唐巧已经写过一篇对block很有研究的<a href="http://blog.devtang.com/2013/07/28/a-look-inside-blocks/" target="_blank" rel="external">文章</a>，大家可以去看看（本文会部分引用巧哥文中出现的图和代码）。在巧哥的基础上，我补充一些block相关的知识点和代码，并且概括并修正一些观点。</p>
+<p><em>1.block是什么？block是对象吗？</em></p>
+<p><em>2.block分为哪几种？__blcok关键字的作用？</em></p>
+<p><em>3.block在ARC和MRC下的区别？</em></p>
+<p><em>4.block的生命周期？</em></p>
+<p><em>5.block对于以参数形式传进来的对象，会不会强引用？？</em></p>
+</blockquote>
+<hr>
+<h4 id="block是什么？block是对象吗？"><a href="#block是什么？block是对象吗？" class="headerlink" title="block是什么？block是对象吗？"></a>block是什么？block是对象吗？</h4><p>先介绍一下什么是闭包。在 wikipedia 上，闭包的定义) 是:</p>
+<blockquote>
+<p>In programming languages, a closure is a function or reference to a function together with a referencing environment—a table storing a reference to each of the non-local variables (also called free variables or upvalues) of that function.</p>
+</blockquote>
+<p>翻译过来，闭包是一个函数（或指向函数的指针），再加上该函数执行的外部的上下文变量（有时候也称作自由变量）。</p>
+<p>block 实际上就是 Objective-C 语言对于闭包的实现。</p>
+<p>block是不是对象？答案显而易见：是的。</p>
+<p>下图是block的数据结构定义，显而易见，在Block_layout里，我们看到了isa指针，这里我们不具体对isa指针展开，也不对block具体数据结构展开，想了解详细可以看唐巧的文章。</p>
+<p>回到上文，为什么说block是对象呢，原因就在于isa指针。那么这个isa指针是何物呢？</p>
+<p><strong>所有对象的都有isa 指针，用于实现对象相关的功能。</strong></p>
+<p>看到这，你应该明白，block其实就是objc对于闭包的对象实现。<br><img src="/2016/04/22/让我们来深入浅出block吧/1.jpg" alt="1.jpg" title=""></p>
+<hr>
+<h4 id="block分为哪几种？-blcok关键字的作用？"><a href="#block分为哪几种？-blcok关键字的作用？" class="headerlink" title="block分为哪几种？__blcok关键字的作用？"></a>block分为哪几种？__blcok关键字的作用？</h4><p>分为三种，即NSConcreteGlobalBlock、NSConcreteStackBlock、NSConcreteMallocBlock。</p>
+<p><strong>详细剖析这三种block，首先是NSConcreteGlobalBlock：</strong></p>
+<p>简单地讲，如果一个block钟没有引用外部变量<strike>并且没有被其他对象持有</strike>，就是NSConcreteGlobalBlock。</p>
+<p>如下图所示：</p>
+<img src="/2016/04/22/让我们来深入浅出block吧/2.png" alt="2.png" title="">
+<p>需要注意的是，NSConcreteGlobalBlock是全局的block，在编译期间就已经决定了，如同宏一样。</p>
+<p><strong>什么是NSConcreteStackBlock呢：</strong></p>
+<p>可以这么理解，NSConcreteStackBlock就是引用了外部变量的block，上代码：</p>
+<img src="/2016/04/22/让我们来深入浅出block吧/3.png" alt="3.png" title="">
+<p>OK，我们已经知道了NSConcreteStackBlock，那么它和NSConcreteGlobalBlock有什么区别呢？难道仅仅是引用了外部变量与否的区别吗？答案是否定的。</p>
+<p>其实NSConcreteStackBlock内部会有一个结构体__main_block_impl_0，这个结构体会保存外部变量，使其体积变大。而这就导致了NSConcreteStackBlock并不像宏一样，而是一个动态的对象。而它由于没有被持有，所以在它的内部，它也不会持有其外部引用的对象。</p>
+<p>证据如下：<br><img src="/2016/04/22/让我们来深入浅出block吧/4.png" alt="4.png" title=""></p>
+<p>从打印的日志可以看出，引用计数始终没变。</p>
+<p><strong>NSConcreteMallocBlock:</strong></p>
+<p>看似最为神秘的NSConcreteMallocBlock其实就是一个block被copy时，将生成NSConcreteMallocBlock（block没有retain）。怎么样，是不是很简单0 0</p>
+<img src="/2016/04/22/让我们来深入浅出block吧/5.png" alt="5.png" title="">
+<p><strong>需要注意的是，NSConcreteMallocBlock会持有外部对象！</strong><br><img src="/2016/04/22/让我们来深入浅出block吧/6.png" alt="6.png" title=""></p>
+<p>看到了吧，只要这个NSConcreteMallocBlock存在，内部对象的引用计数就会+1。</p>
+<p><strong>下面来说说__block这个关键字：</strong></p>
+<p>先上一个例子，你们很快就会明白了</p>
+<img src="/2016/04/22/让我们来深入浅出block吧/7.png" alt="7.png" title="">
+<p>没错，前文说过，block引用外部是以捕获的形式来捕捉的，而没有声明<strong>block，则会将外部变量copy进block，若用了</strong>block，则是复制其引用地址来实现访问。这就是为什么声明了__block，在block内部改变就会对外有影响的原因了。</p>
+<p><strong>注意！！这里需要知道的是，在MRC环境下，如果没有用<strong>block，会对外部对象采用copy的操作，而用了</strong>block则不会用copy的操作。</strong></p>
+<p>上代码：</p>
+<img src="/2016/04/22/让我们来深入浅出block吧/8.png" alt="8.png" title="">
+<p>哈哈哈，怎么样，所以从更底层的角度来说，<strong>在MRC环境下，__block根本不会对指针所指向的对象执行copy操作，而只是把指针进行的复制。而这一点往往是很多新手&amp;老手所不知道的！</strong></p>
+<p><strong>而在ARC环境下，对于声明为__block的外部对象，在block内部会进行retain，以至于在block环境内能安全的引用外部对象，所以要谨防循环引用的问题！</strong></p>
+<hr>
+<h4 id="block在ARC和MRC下的区别？"><a href="#block在ARC和MRC下的区别？" class="headerlink" title="block在ARC和MRC下的区别？"></a><strong>block在ARC和MRC下的区别？</strong></h4><p>首先要指正下巧哥博客的观点：</p>
+<blockquote>
+<strike>在 ARC 开启的情况下，将只会有 NSConcreteGlobalBlock 和 NSConcreteMallocBlock 类型的 block。</strike>
+
+</blockquote>
+<p>在上面介绍NSConcreteStackBlock的时候，是在ARC环境下跑的，而打印出来的日志明确的显示出，当时的block类型为NSConcreteStackBlock。</p>
+<p>而实际上，为什么大家普遍会认为ARC下不存在NSConcreteStackBlock呢？</p>
+<p><strong>这是因为本身我们常常将block赋值给变量，而ARC下默认的赋值操作是strong的，到了block身上自然就成了copy，所以常常打印出来的block就是NSConcreteMallocBlock了。</strong></p>
+<p>so，在ARC下，大部分的应用场景下，几乎可以说是全部都为NSConcreteMallocBlock或者是NSConcreteGlobalBlock。那么问题来了，我们知道NSConcreteMallocBlock是会持有外部变量的，而此时如果它所持有的外部变量正好又持有它，就会产生循环引用的问题。</p>
+<p>让我们来聊聊block的生命周期！</p>
+<hr>
+<h4 id="block的生命周期？"><a href="#block的生命周期？" class="headerlink" title="block的生命周期？"></a>block的生命周期？</h4><p>谈到block生命周期，其实这是一个非常严肃的话题，虽然block简单易用，老少皆宜，但是一旦使用不慎容易造成“强撸灰飞烟灭”的后果（<strong>内存泄露</strong>）。</p>
+<p>ps：接下来的例子都用ARC来展示了</p>
+<p>首先展示：<br><img src="/2016/04/22/让我们来深入浅出block吧/9.png" alt="9.png" title=""></p>
+<p>不用看了，这个object永远也不会被释放，这是一个很典型的循环引用情形。object持有了block（读者可以想象此处为何为NSConcreteMallocBlock，提示：在ARC环境下），而block又持有了object，于是造成死锁，object再也不会被释放了。此时机智的编译器给了你warning，但是在很多复杂的情况下，编译器并不能识别出循环引用的场景。而此时你就需要注意了！</p>
+<p>那么，我是如何来处理block的生命周期相关问题的呢，首先前文提到，block是一个对象，既然是一个对象，它必然有着和对象一样的生命周期即如果没有被引用就会被释放。</p>
+<p>所以block的生命周期归结起来很简单，只要看持有block的对象是不是也被block持有，如果没有持有，就不用担心循环引用问题了。</p>
+<p>但是像上面的情况，如果产生相互持有的情况该肿么办！</p>
+<p>你可以用<strong>weak(ARC)或</strong>block(MRC)来解决:<br><img src="/2016/04/22/让我们来深入浅出block吧/10.png" alt="10.png" title=""></p>
+<p>看，现在就可以愉快的释放了。</p>
+<hr>
+<h4 id="block对于以参数形式传进来的对象，会不会强引用？"><a href="#block对于以参数形式传进来的对象，会不会强引用？" class="headerlink" title="block对于以参数形式传进来的对象，会不会强引用？"></a>block对于以参数形式传进来的对象，会不会强引用？</h4><p>唉，不知不觉已经快半夜2点了，对于这部分的话，其实也是闲着蛋疼在想这个问题。</p>
+<p>其实block与函数和方法一样，对于传进来的参数，并不会持有</p>
+<p>证据如下：<br><img src="/2016/04/22/让我们来深入浅出block吧/11.png" alt="11.png" title=""></p>
+<hr>
+<h1 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h1><p>到这里，对于block的介绍结束了。实际运用中其实不用太关心这些原理的，只需要正确掌握好block的生命周期就可以灵活地运用block了。但是对于一个资深开发者来说，block的深层次掌握还是必须的！</p>
+<p>好的，下次再见！</p>
+<p>欢迎大家关注<a href="http://weibo.com/2162473223" target="_blank" rel="external">@kuailejim</a>，我会经常在上面分享一些大家感兴趣的东西。</p>
+
+  </section>
+
+  
+  
+</article>
+
+
+            <footer class="footer">
+
+    <span class="footer__copyright">Stay Hungry, Stay Foolish.</span>
+    
+</footer>
+        </div>
+    </div>
+
+    <!-- js files -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/scale.fix.js"></script>
+    
+
+    
+
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript"> 
+        $(document).ready(function(){
+            MathJax.Hub.Config({ 
+                tex2jax: {inlineMath: [['[latex]','[/latex]'], ['\\(','\\)']]} 
+            });
+        });
+    </script>
+
+
+    
+
+    <script src="/js/awesome-toc.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.awesome_toc({
+                overlay: true,
+                contentId: "post-content",
+            });
+        });
+    </script>
+
+
+    
+    
+
+    <script src="/js/jquery.githubRepoWidget.min.js"></script>
+
+
+    <!--kill ie6 -->
+<!--[if IE 6]>
+  <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
+<![endif]-->
+
+</body>
+</html>
