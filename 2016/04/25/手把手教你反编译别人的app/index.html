@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    
+
+    <title>
+      手把手教你反编译别人的app | Developer Center 
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    
+      <meta name="author" content="Jim">
+    
+    
+
+    <meta name="description" content="虽然iOS系统相比于其他手机操作系统相对安全，但是这个安全并不是绝对的，我一直相信，道高一尺魔高一丈。此文想以实际例子出发，告诉大家，如何去反编译一个app，并且从某个角度来说，iOS没有传说中的“安全”。
+
+这里只最简单的结论给大家，具体原理以及工具的详细使用，请各位自行Google，为什么这么做呢，因为我想用最简单的语言，让没有汇编基础的同学也能明白。
+将用以下几个方面来阐述我的观点：
+iO">
+<meta property="og:type" content="article">
+<meta property="og:title" content="手把手教你反编译别人的app | Developer Center">
+<meta property="og:url" content="http://kuailejim.com/2016/04/25/手把手教你反编译别人的app/index.html">
+<meta property="og:site_name" content="Developer Center">
+<meta property="og:description" content="虽然iOS系统相比于其他手机操作系统相对安全，但是这个安全并不是绝对的，我一直相信，道高一尺魔高一丈。此文想以实际例子出发，告诉大家，如何去反编译一个app，并且从某个角度来说，iOS没有传说中的“安全”。
+
+这里只最简单的结论给大家，具体原理以及工具的详细使用，请各位自行Google，为什么这么做呢，因为我想用最简单的语言，让没有汇编基础的同学也能明白。
+将用以下几个方面来阐述我的观点：
+iO">
+<meta property="og:image" content="http://kuailejim.com/2016/04/25/手把手教你反编译别人的app/1.png">
+<meta property="og:image" content="http://kuailejim.com/2016/04/25/手把手教你反编译别人的app/2.png">
+<meta property="og:image" content="http://kuailejim.com/2016/04/25/手把手教你反编译别人的app/3.png">
+<meta property="og:image" content="http://kuailejim.com/2016/04/25/手把手教你反编译别人的app/4.png">
+<meta property="og:image" content="http://kuailejim.com/2016/04/25/手把手教你反编译别人的app/5.png">
+<meta property="og:image" content="http://kuailejim.com/2016/04/25/手把手教你反编译别人的app/6.png">
+<meta property="og:image" content="http://kuailejim.com/2016/04/25/手把手教你反编译别人的app/7.png">
+<meta property="og:image" content="http://kuailejim.com/2016/04/25/手把手教你反编译别人的app/8.png">
+<meta property="og:updated_time" content="2016-04-25T11:57:06.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="手把手教你反编译别人的app | Developer Center">
+<meta name="twitter:description" content="虽然iOS系统相比于其他手机操作系统相对安全，但是这个安全并不是绝对的，我一直相信，道高一尺魔高一丈。此文想以实际例子出发，告诉大家，如何去反编译一个app，并且从某个角度来说，iOS没有传说中的“安全”。
+
+这里只最简单的结论给大家，具体原理以及工具的详细使用，请各位自行Google，为什么这么做呢，因为我想用最简单的语言，让没有汇编基础的同学也能明白。
+将用以下几个方面来阐述我的观点：
+iO">
+<meta name="twitter:image" content="http://kuailejim.com/2016/04/25/手把手教你反编译别人的app/1.png">
+    
+    
+    
+      <link rel="icon" type="image/x-icon" href="/favicon.png">
+    
+    <link rel="stylesheet" href="/css/uno.css">
+    <link rel="stylesheet" href="/css/highlight.css">
+    <link rel="stylesheet" href="/css/archive.css">
+    <link rel="stylesheet" href="/css/china-social-icon.css">
+
+</head>
+<body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="icon icon-list btn-mobile-menu__icon"></i>
+        <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+
+<header class="panel-cover panel-cover--collapsed">
+
+
+  <div class="panel-main">
+
+  
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage">Developer Center</a></h1>
+        <hr class="panel-cover__divider" />
+
+        
+        <p class="panel-cover__description">
+          黄建敏(@kuailejim) | iOS Developer | Crazy Driver
+        </p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+
+        <div class="navigation-wrapper">
+
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+
+              
+                
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">博客</a></li>
+              
+                
+                <li class="navigation__item"><a href="http://www.jianshu.com/users/40e4dced948f" title="" class="">简书</a></li>
+              
+
+            </ul>
+          </nav>
+
+          <!-- ----------------------------
+To add a new social icon simply duplicate one of the list items from below
+and change the class in the <i> tag to match the desired social network
+and then add your link to the <a>. Here is a full list of social network
+classes that you can use:
+
+    icon-social-500px
+    icon-social-behance
+    icon-social-delicious
+    icon-social-designer-news
+    icon-social-deviant-art
+    icon-social-digg
+    icon-social-dribbble
+    icon-social-facebook
+    icon-social-flickr
+    icon-social-forrst
+    icon-social-foursquare
+    icon-social-github
+    icon-social-google-plus
+    icon-social-hi5
+    icon-social-instagram
+    icon-social-lastfm
+    icon-social-linkedin
+    icon-social-medium
+    icon-social-myspace
+    icon-social-path
+    icon-social-pinterest
+    icon-social-rdio
+    icon-social-reddit
+    icon-social-skype
+    icon-social-spotify
+    icon-social-stack-overflow
+    icon-social-steam
+    icon-social-stumbleupon
+    icon-social-treehouse
+    icon-social-tumblr
+    icon-social-twitter
+    icon-social-vimeo
+    icon-social-xbox
+    icon-social-yelp
+    icon-social-youtube
+    icon-social-zerply
+    icon-mail
+
+-------------------------------->
+
+<!-- add social info here -->
+
+
+
+<nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+    
+      <!-- Github -->
+      <li class="navigation__item">
+        <a href="https://github.com/kuailejim" title="Huno on GitHub">
+          <i class='icon icon-social-github'></i>
+          <span class="label">GitHub</span>
+        </a>
+      </li>
+    
+
+    <!-- China social icon -->
+
+      <li class="navigation__item">
+        <a href="http://weibo.com/huangjim/" title="">
+          <i class='icon cs-icon-weibo'></i>
+          <span class="label">Weibo</span>
+        </a>
+      </li>
+
+  </ul>
+</nav>
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay"></div>
+  </div>
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner entry">
+            
+
+<article class="post-container post-container--single">
+
+  <header class="post-header">
+    
+    <h1 class="post-title">手把手教你反编译别人的app</h1>
+
+    
+
+    <div class="post-meta">
+      <time datetime="2016-04-25" class="post-meta__date date">2016-04-25</time> 
+
+      <span class="post-meta__tags tags">
+
+          
+
+          
+
+      </span>
+    </div>
+    
+    
+
+  </header>
+
+  <section id="post-content" class="article-content post">
+    <blockquote>
+<p>虽然iOS系统相比于其他手机操作系统相对安全，但是这个安全并不是绝对的，我一直相信，道高一尺魔高一丈。此文想以实际例子出发，告诉大家，如何去反编译一个app，并且从某个角度来说，iOS没有传说中的“安全”。</p>
+</blockquote>
+<p><strong>这里只最简单的结论给大家，具体原理以及工具的详细使用，请各位自行Google，为什么这么做呢，因为我想用最简单的语言，让没有汇编基础的同学也能明白。</strong></p>
+<h4 id="将用以下几个方面来阐述我的观点："><a href="#将用以下几个方面来阐述我的观点：" class="headerlink" title="将用以下几个方面来阐述我的观点："></a>将用以下几个方面来阐述我的观点：</h4><ul>
+<li>iOS app可以“有条件”地被反编译</li>
+<li>脱掉App Store给“二级制文件”穿上的外衣</li>
+<li>如何利用工具去反编译</li>
+<li>在感兴趣的地方生成伪代码</li>
+<li>如何预防反编译</li>
+</ul>
+<h5 id="iOS-app可以“有条件”地被反编译"><a href="#iOS-app可以“有条件”地被反编译" class="headerlink" title="iOS app可以“有条件”地被反编译"></a>iOS app可以“有条件”地被反编译</h5><p>首先，告诉大家一个不幸的消息，上架至App Store的app，被apple加密了。所以标题才是“有条件”才能进行反编译，令人欣喜的是，在debug下产生的ipa或者是release下的ipa包或者是渠道包（各种应用市场能下的ipa包）都能直接反编译。</p>
+<h5 id="脱掉App-Store给“二级制文件”穿上的外衣"><a href="#脱掉App-Store给“二级制文件”穿上的外衣" class="headerlink" title="脱掉App Store给“二级制文件”穿上的外衣"></a>脱掉App Store给“二级制文件”穿上的外衣</h5><p>当然，引言已经说了，道高一尺魔高一丈，就算是被apple加密的ipa，其实也是可以反编译的，只不过相对麻烦罢了。<br>来来来，给你们几个工具，就可以解掉apple的加密了。</p>
+<ul>
+<li>clutch</li>
+<li>dumpdecrypted</li>
+<li>gdb</li>
+<li>AppCrackr</li>
+</ul>
+<p>由于AppCrackr被很多开发者吐槽，这个傻瓜式的解密会严重导致盗版泛滥，所以这个工具已经很不好用了。<br>这里就不展示demo了，感觉如果把App Store上的东西反编译出来发到网上去，我感觉我的程序员生涯可能就要到头了。</p>
+<h5 id="如何利用工具去反编译"><a href="#如何利用工具去反编译" class="headerlink" title="如何利用工具去反编译"></a>如何利用工具去反编译</h5><p>这里会介绍两个工具<strong>class-dump</strong>和<strong>Hopper Disassembler</strong>。<br>首先，先撸一个最简单的app来做小白鼠。<a href="https://github.com/kuailejim/demo" target="_blank" rel="external">下载地址（包含二进制文件&amp;dump结果）</a><br>看图，就是这样，我只改了ViewController这个类。</p>
+<img src="/2016/04/25/手把手教你反编译别人的app/1.png" alt="1.png" title="">
+<img src="/2016/04/25/手把手教你反编译别人的app/2.png" alt="2.png" title="">
+<p>由代码可以看出，我就写了两个方法<code>testClassDump</code>和<code>testHideClassDump</code>，后者没有声明在.h中（ps：我想试验这样能不能被反编译到）。</p>
+<p><strong>ok，前戏都做完了，可以开始干活了。</strong></p>
+<p>我们run一下工程，然后打开Products文件夹下的DecompilingTest.app所在目录，显示包内容，拿到<strong>二进制文件</strong>。</p>
+<img src="/2016/04/25/手把手教你反编译别人的app/3.png" alt="3.png" title="">
+<p>然后我是复制到桌面，然后执行下述命令，即可拿到工程中的.h文件。</p>
+<img src="/2016/04/25/手把手教你反编译别人的app/4.png" alt="4.png" title="">
+<p>OK，得到下述结果，我们看看拿到的ViewController.h里面，能拿到什么方法</p>
+<img src="/2016/04/25/手把手教你反编译别人的app/5.png" alt="5.png" title="">
+<p><strong>事实证明，没有声明的方法也被dump出来了。</strong></p>
+<p>下一步我们要做的就是看看能不能拿到这两个方法的具体实现了，接下来我们用<strong>Hopper Disassembler</strong>来试试。</p>
+<p><strong>Hopper Disassembler</strong>的用法很简单，只要将二进制文件拖进去就行了。看看拖进去之后的结果。</p>
+<img src="/2016/04/25/手把手教你反编译别人的app/6.png" alt="6.png" title="">
+<p>此时心中一万头草泥马飞奔而过，what’s the fk！！一堆汇编语言宝宝看不懂啊。（当然那个ret应该是return的意思我猜）</p>
+<h5 id="在感兴趣的地方生成伪代码"><a href="#在感兴趣的地方生成伪代码" class="headerlink" title="在感兴趣的地方生成伪代码"></a>在感兴趣的地方生成伪代码</h5><p>Don’t worry！点右上角的<strong>if(b)f(x);</strong>按钮，我们能看到这个方法的伪代码，大部分的时候我们能从伪代码中看出我们需要的信息。</p>
+<p>结果如下：</p>
+<img src="/2016/04/25/手把手教你反编译别人的app/7.png" alt="7.png" title="">
+<img src="/2016/04/25/手把手教你反编译别人的app/8.png" alt="8.png" title="">
+<p>至此，两个方法都被反编译出来了！！</p>
+<p><strong>这里需要注意，就算方法没有声明在.h中，也能被dump，之后就能被反编译了。</strong></p>
+<h5 id="如何预防反编译"><a href="#如何预防反编译" class="headerlink" title="如何预防反编译"></a>如何预防反编译</h5><p>说了这么多，我们预防呢，是不是需要像Java的一样加上各种复杂的<strong>混淆</strong>呢。</p>
+<p>其实我觉得大可不必，本身反编译成本就很大，代码这么多，一个个反编译过来是在蛋疼，就算有伪代码也需要理解，而且有些代码就算有伪代码也很难理解。</p>
+<p><strong>只要做好核心代码，做好混淆就行了，比如涉及到密码，核心算法。</strong></p>
+<h5 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h5><p><strong>没有绝对安全的系统，也没有黑客破不掉的系统，所有需要的只是时间而已。</strong></p>
+<p>OK，就到这了，明天早起实习去。</p>
+<p>个人微博：<a href="http://weibo.com/huangjim" target="_blank" rel="external">kuailejim</a><br>个人博客：<a href="http://kuailejim.com">http://kuailejim.com</a></p>
+
+  </section>
+
+  
+  
+
+<section class="post-comments">
+
+    <div class="ds-thread" data-thread-key="2016/04/25/手把手教你反编译别人的app/"></div>
+
+    <script type="text/javascript">
+      var duoshuoQuery = {short_name:"kuailejim"};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+        || document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+    </script> 
+
+</section>
+
+
+</article>
+
+
+            <footer class="footer">
+
+    <span class="footer__copyright">Stay Hungry, Stay Foolish.</span>
+    
+</footer>
+        </div>
+    </div>
+
+    <!-- js files -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/scale.fix.js"></script>
+    
+
+    
+
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript"> 
+        $(document).ready(function(){
+            MathJax.Hub.Config({ 
+                tex2jax: {inlineMath: [['[latex]','[/latex]'], ['\\(','\\)']]} 
+            });
+        });
+    </script>
+
+
+    
+
+    <script src="/js/awesome-toc.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.awesome_toc({
+                overlay: true,
+                contentId: "post-content",
+            });
+        });
+    </script>
+
+
+    
+    
+
+    <script src="/js/jquery.githubRepoWidget.min.js"></script>
+
+
+    <!--kill ie6 -->
+<!--[if IE 6]>
+  <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
+<![endif]-->
+
+</body>
+</html>
