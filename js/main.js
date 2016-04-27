@@ -21,7 +21,7 @@ $(document).ready(function() {
   });
 
   $('.navigation-wrapper .blog-button').click(function() {
-    // $('.navigation-wrapper').toggleClass('visible');
+    $('.navigation-wrapper').toggleClass('visible animated bounceInDown');
     $('.btn-mobile-menu__icon').toggleClass('icon-list icon-x-circle animated fadeIn');
   });
 
