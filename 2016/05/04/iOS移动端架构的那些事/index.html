@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    
+
+    <title>
+      iOS移动端架构的那些事 | Developer Center 
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    
+      <meta name="author" content="Jim">
+    
+    
+
+    <meta name="description" content="引言：一个app的初始阶段，必然是先满足各种业务需求。然后，经过多次版本迭代之后，先前的由于急于满足需求而导致的杂乱代码则会充斥整个项目。而此时，项目有了一定的规模，有了一定数量的开发人员，那么为了达到快速迭代版本的需求，则是需要有一个强大的架构来支撑。
+
+在开始谈app架构之前，曾经我一度认为，一个好的app就是需要有好的架构，如果没有一个我所认为的“好架构”，那么这个app就是很low。直到">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS移动端架构的那些事 | Developer Center">
+<meta property="og:url" content="http://kuailejim.com/2016/05/04/iOS移动端架构的那些事/index.html">
+<meta property="og:site_name" content="Developer Center">
+<meta property="og:description" content="引言：一个app的初始阶段，必然是先满足各种业务需求。然后，经过多次版本迭代之后，先前的由于急于满足需求而导致的杂乱代码则会充斥整个项目。而此时，项目有了一定的规模，有了一定数量的开发人员，那么为了达到快速迭代版本的需求，则是需要有一个强大的架构来支撑。
+
+在开始谈app架构之前，曾经我一度认为，一个好的app就是需要有好的架构，如果没有一个我所认为的“好架构”，那么这个app就是很low。直到">
+<meta property="og:image" content="http://kuailejim.com/2016/05/04/iOS移动端架构的那些事/1.png">
+<meta property="og:image" content="http://kuailejim.com/2016/05/04/iOS移动端架构的那些事/2.png">
+<meta property="og:image" content="http://kuailejim.com/2016/05/04/iOS移动端架构的那些事/3.png">
+<meta property="og:image" content="http://kuailejim.com/2016/05/04/iOS移动端架构的那些事/4.png">
+<meta property="og:image" content="http://kuailejim.com/2016/05/04/iOS移动端架构的那些事/5.png">
+<meta property="og:image" content="http://kuailejim.com/2016/05/04/iOS移动端架构的那些事/6.png">
+<meta property="og:image" content="http://kuailejim.com/2016/05/04/iOS移动端架构的那些事/7.png">
+<meta property="og:image" content="http://kuailejim.com/2016/05/04/iOS移动端架构的那些事/8.png">
+<meta property="og:image" content="http://kuailejim.com/2016/05/04/iOS移动端架构的那些事/9.png">
+<meta property="og:updated_time" content="2016-05-04T13:52:58.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS移动端架构的那些事 | Developer Center">
+<meta name="twitter:description" content="引言：一个app的初始阶段，必然是先满足各种业务需求。然后，经过多次版本迭代之后，先前的由于急于满足需求而导致的杂乱代码则会充斥整个项目。而此时，项目有了一定的规模，有了一定数量的开发人员，那么为了达到快速迭代版本的需求，则是需要有一个强大的架构来支撑。
+
+在开始谈app架构之前，曾经我一度认为，一个好的app就是需要有好的架构，如果没有一个我所认为的“好架构”，那么这个app就是很low。直到">
+<meta name="twitter:image" content="http://kuailejim.com/2016/05/04/iOS移动端架构的那些事/1.png">
+    
+    
+    
+      <link rel="icon" type="image/x-icon" href="/favicon.png">
+    
+    <link rel="stylesheet" href="/css/uno.css">
+    <link rel="stylesheet" href="/css/highlight.css">
+    <link rel="stylesheet" href="/css/archive.css">
+    <link rel="stylesheet" href="/css/china-social-icon.css">
+
+</head>
+<body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="icon icon-list btn-mobile-menu__icon"></i>
+        <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+
+<header class="panel-cover panel-cover--collapsed">
+
+
+  <div class="panel-main">
+
+  
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage">Developer Center</a></h1>
+        <hr class="panel-cover__divider" />
+
+        
+        <p class="panel-cover__description">
+          黄建敏(@kuailejim) | iOS Developer | Crazy Driver
+        </p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+
+        <div class="navigation-wrapper">
+
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+
+              
+                
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">博客</a></li>
+              
+                
+                <li class="navigation__item"><a href="http://www.jianshu.com/users/40e4dced948f" title="" class="">简书</a></li>
+              
+
+            </ul>
+          </nav>
+
+          <!-- ----------------------------
+To add a new social icon simply duplicate one of the list items from below
+and change the class in the <i> tag to match the desired social network
+and then add your link to the <a>. Here is a full list of social network
+classes that you can use:
+
+    icon-social-500px
+    icon-social-behance
+    icon-social-delicious
+    icon-social-designer-news
+    icon-social-deviant-art
+    icon-social-digg
+    icon-social-dribbble
+    icon-social-facebook
+    icon-social-flickr
+    icon-social-forrst
+    icon-social-foursquare
+    icon-social-github
+    icon-social-google-plus
+    icon-social-hi5
+    icon-social-instagram
+    icon-social-lastfm
+    icon-social-linkedin
+    icon-social-medium
+    icon-social-myspace
+    icon-social-path
+    icon-social-pinterest
+    icon-social-rdio
+    icon-social-reddit
+    icon-social-skype
+    icon-social-spotify
+    icon-social-stack-overflow
+    icon-social-steam
+    icon-social-stumbleupon
+    icon-social-treehouse
+    icon-social-tumblr
+    icon-social-twitter
+    icon-social-vimeo
+    icon-social-xbox
+    icon-social-yelp
+    icon-social-youtube
+    icon-social-zerply
+    icon-mail
+
+-------------------------------->
+
+<!-- add social info here -->
+
+
+
+<nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+    
+      <!-- Github -->
+      <li class="navigation__item">
+        <a href="https://github.com/kuailejim" title="Huno on GitHub">
+          <i class='icon icon-social-github'></i>
+          <span class="label">GitHub</span>
+        </a>
+      </li>
+    
+
+    <!-- China social icon -->
+
+      <li class="navigation__item">
+        <a href="http://weibo.com/huangjim/" title="">
+          <i class='icon cs-icon-weibo'></i>
+          <span class="label">Weibo</span>
+        </a>
+      </li>
+
+  </ul>
+</nav>
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay"></div>
+  </div>
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner entry">
+            
+
+<article class="post-container post-container--single">
+
+  <header class="post-header">
+    
+    <h1 class="post-title">iOS移动端架构的那些事</h1>
+
+    
+
+    <div class="post-meta">
+      <time datetime="2016-05-04" class="post-meta__date date">2016-05-04</time> 
+
+      <span class="post-meta__tags tags">
+
+          
+
+          
+
+      </span>
+    </div>
+    
+    
+
+  </header>
+
+  <section id="post-content" class="article-content post">
+    <blockquote>
+<p>引言：一个app的初始阶段，必然是先满足各种业务需求。然后，经过多次版本迭代之后，先前的由于急于满足需求而导致的杂乱代码则会充斥整个项目。而此时，项目有了一定的规模，有了一定数量的开发人员，那么为了达到快速迭代版本的需求，则是需要有一个强大的架构来支撑。</p>
+</blockquote>
+<p>在开始谈app架构之前，曾经我一度认为，一个好的app就是需要有好的架构，如果没有一个我所认为的“好架构”，那么这个app就是很low。<br>直到去年参加北京ArchSummit时，听了无数的公司他们对于产品的架构之后，我陷入沉思，因为我总在自己的认知里选出一个自己认为最好的架构，然后觉得其他架构都是垃圾。<br>静下心来想想，每个产品都有自己不同的定位，如果抛开它们的定位，抛开它们的业务需求去谈如果给它们设计一个良好的架构，这简直是扯淡。<br>更何况很多优秀的app架构也是由一开始很弱而慢慢变得越来越强。<br><strong>所以没有最好的架构，只有适合自己的业务的架构才是最好的架构，并且它是逐步地变强变大。</strong><br>本文将举一个例子来演示这个过程。</p>
+<hr>
+<h4 id="那么，到底什么是架构？"><a href="#那么，到底什么是架构？" class="headerlink" title="那么，到底什么是架构？"></a>那么，到底什么是架构？</h4><blockquote>
+<p>架构，又名软件架构，是有关软件整体结构与组件的抽象描述，用于指导大型软件系统各个方面的设计。</p>
+</blockquote>
+<p>以我的理解，它就像是人的<strong>骨架</strong>一般，一个人从小生长到大，围绕着整个骨架去发展，变高变胖。<br>可以把app开发看成一个汽车工厂的流水线，造车身-&gt;喷漆-&gt;组装等等。即把整个开发流程切成一个个模块，每个模块相互独立，并发工作。<strong>这就是所谓app架构。</strong></p>
+<hr>
+<h4 id="没有架构的“架构”"><a href="#没有架构的“架构”" class="headerlink" title="没有架构的“架构”"></a>没有架构的“架构”</h4><p>某天，一个叫Jim的开发者，他打算开发一个app，当然有一定计算机基础的他知道采用<strong>MVC</strong>的设计模式来构造app，于是一个星期后，终于能跑起来一个app，但是此时，看一下项目的目录结构：</p>
+<img src="/2016/05/04/iOS移动端架构的那些事/1.png" alt="1.png" title="">
+<p>嗯，不错，我们不但能run，还能看出这个app用了<strong>MVC</strong>的设计模式耶。<br>但是随着开发的页面越来越多，一个月后，app有了<strong>10个页面</strong>，此时，打开Controller、View、Model这三个文件夹之后，发现每个文件夹里面竟然有<strong>几十个文件</strong>，它们杂乱无章的洒落在一起。此时不断有用户向Jim反映，xxx地方怎么按钮位置不对，xxx位置网络请求不成功。<br>头痛的Jim才知道，当初应该把<strong>粒度分的更细</strong>，于是又了接下来的架构。</p>
+<hr>
+<h4 id="分模块的架构"><a href="#分模块的架构" class="headerlink" title="分模块的架构"></a>分模块的架构</h4><p>Jim把不同的功能模块放在一块儿，于是得到了如下的架构：</p>
+<img src="/2016/05/04/iOS移动端架构的那些事/2.png" alt="2.png" title="">
+<p>但是不对，一些<strong>工具类，公用类</strong>该放哪呢？Jim仔细思索了一番，于是又将上述架构进行改进，得到以下的架构：</p>
+<img src="/2016/05/04/iOS移动端架构的那些事/3.png" alt="3.png" title="">
+<p>嗯，这看起来才像样嘛。</p>
+<hr>
+<h4 id="Cocoapods"><a href="#Cocoapods" class="headerlink" title="Cocoapods"></a>Cocoapods</h4><p>慢慢地，Jim发现网上有很多可以现成拿来用的第三方框架，而他同时也学习了<strong>Cocoapods</strong>这个神器。<br>什么是Cocoapods：</p>
+<blockquote>
+<p>CocoaPods is a dependency manager for Swift and Objective-C Cocoa projects. It has over eighteen thousand libraries and can help you scale your projects elegantly.</p>
+</blockquote>
+<p><strong>它是一个能让你方便地管理第三方库的一个工具</strong>。<br>于是，项目变成了这样：</p>
+<img src="/2016/05/04/iOS移动端架构的那些事/4.png" alt="4.png" title="">
+<p>此时的架构已经满足了个人开发者，或者说是小型开发团队的需求了。</p>
+<hr>
+<h4 id="多人开发的架构"><a href="#多人开发的架构" class="headerlink" title="多人开发的架构"></a>多人开发的架构</h4><p>但是在一个初具规模的公司，上述的架构模式是远远不行的，试想一下，如果有20个人同时开发一个app，而此时大家就算各自负责自己的模块，如果同时有不同模块的同学添加或者删除文件，对于<code>.xcodeproj</code>文件来说，会有严重的冲突。<br><strong>那么，怎么办呢？</strong><br>想一下<strong>cocoapods</strong>的作用吧，其实利用它能做很多很多事，我们完全可以把<code>Home、Detail、Login</code>等模块抽出来，也把它视为“第三方库”（实际上可以算是二方库）。初期阶段可以这么做：</p>
+<img src="/2016/05/04/iOS移动端架构的那些事/5.png" alt="5.png" title="">
+<p>可以看到我们把<code>Home</code>这个模块抽出来了。<br><strong>这么做有什么好处？</strong><br>如果我们把各个业务模块都抽出来，首先来说，可以解决<strong>冲突</strong>的问题，并且业务团队之间的工作不受影响，并且可以<strong>并行开发</strong>，也无需再等待其他兄弟业务团队的进度了。<br>当其他业务团队的任务完成时，我们只需<code>pod update</code>，将代码升级到最新就可以了。<br>并且当一个公司有多个app时，如果有<strong>公用的模块</strong>，用这种方式会更优雅。<br>当然，如果你觉得直接指定git地址太low，你完全可以搞一个<strong>私有Spec</strong>，专门存放业务模块代码。</p>
+<hr>
+<h4 id="子project模式的架构"><a href="#子project模式的架构" class="headerlink" title="子project模式的架构"></a>子project模式的架构</h4><p>很多人会说上述方式很复杂，还不如采用在<strong>主工程下中放子工程（业务模块）</strong>来实现抽象：</p>
+<img src="/2016/05/04/iOS移动端架构的那些事/6.png" alt="6.png" title="">
+<p><em>但是我觉得这个方式管理起项目很麻烦，更新模块代码、不同app间复用模块代码都会没上述的方式优雅，所以我觉得这种方式没有上述的好。</em></p>
+<hr>
+<h4 id="对各个模块进行解耦"><a href="#对各个模块进行解耦" class="headerlink" title="对各个模块进行解耦"></a>对各个模块进行解耦</h4><p>现在虽然我们对各个模块进行了抽象，但是业务模块间还是互相引用，对于开发来说，<strong>虽然解决了代码的耦合问题，对于代码的引用关系却没有改变：</strong></p>
+<img src="/2016/05/04/iOS移动端架构的那些事/7.png" alt="7.png" title="">
+<p>上图才只有4个模块，如果有上百个模块的话，这个关系可以复杂成一个庞大的蜘蛛网，<strong>这对于后期维护来说，成本是巨大的。</strong></p>
+<p>所以我们想，有木有好的方式来解耦呢，当然是有的，我觉得以下两个方式是很好的：</p>
+<ul>
+<li>middleman</li>
+<li>urlRoute</li>
+</ul>
+<p>先来介绍<strong>middleman（中间人模式）</strong></p>
+<img src="/2016/05/04/iOS移动端架构的那些事/8.png" alt="8.png" title="">
+<p>如图所示，我们只需将所有的模块依赖这个<strong>middleman</strong>，让<strong>middleman</strong>来处理各个模块的关系，模块A如果需要依赖模块B，完全可以考<strong>middleman</strong>来处理，并且返回模块A所需要的模块B的内容，这样就解决了<strong>解耦</strong>。</p>
+<p>再来说说<strong>urlRoute</strong>，其实这个方式类似于Facebook很早前的<strong>320</strong>结构了。<br>思路就是将每个页面看成是一个url，设置一套路由规则，在页面打开时将url进行路由查找，然后这样一来，只要模块A按照既定的规则写好url，那么模块B依赖模块A时，只需根据url打开就行了。</p>
+<img src="/2016/05/04/iOS移动端架构的那些事/9.png" alt="9.png" title="">
+<hr>
+<h4 id="middleman-VS-urlRoute"><a href="#middleman-VS-urlRoute" class="headerlink" title="middleman VS urlRoute"></a>middleman VS urlRoute</h4><p>两种方式各自有自己的优点和缺点，他们主要的区别在于：</p>
+<ul>
+<li>传参的方式</li>
+<li>所需维护的具体内容不同</li>
+</ul>
+<p>我更倾向于<strong>urlRoute</strong>，为什么这么说呢？<br>由于本文讲的是app架构，这里就简单介绍下：<br>如果一个页面出现了问题，我们可以用各种patch的方式来打补丁。但是，如果一个页面出现了致命的错误，打patch的成本过于高的话，此时如果用urlRoute，则有个妙招。<br>我们可以更改appConfig（app的配置，可以从服务端动态更新），更改页面所对应的url，并且改成在路由规则里跳到webview的规则。<br>这样之后，当跳到此模块时，则<strong>会打开对应的H5页面</strong>，而不是原来的有问题的页面。<br>当然middleman也可以处理成这样，但是从实现的角度来说，显然是urlRoute更为优秀。</p>
+<hr>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>当然，架构远远不是一篇文章能讲清楚的，也不仅仅只是结构层次方面的内容，还有例如push、hotpatch、动态化、appConf、Service中间件模块的具体实现，MVC\MVVM\MVCS设计模式等等。<br>本文只是从最基础的地方展现具体业务模块的解耦方式，希望能起到抛砖引玉的作用。<br>个人微博：<a href="http://weibo.com/huangjim" target="_blank" rel="external">@kuailejim</a><br>个人博客：<a href="http://kuailejim.com">http://kuailejim.com</a></p>
+
+  </section>
+
+  
+  
+
+<section class="post-comments">
+
+    <div class="ds-thread" data-thread-key="2016/05/04/iOS移动端架构的那些事/"></div>
+
+    <script type="text/javascript">
+      var duoshuoQuery = {short_name:"kuailejim"};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+        || document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+    </script> 
+
+</section>
+
+
+</article>
+
+
+            <footer class="footer">
+
+    <span class="footer__copyright">Stay Hungry, Stay Foolish.</span>
+    
+</footer>
+        </div>
+    </div>
+
+    <!-- js files -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/scale.fix.js"></script>
+    
+
+    
+
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript"> 
+        $(document).ready(function(){
+            MathJax.Hub.Config({ 
+                tex2jax: {inlineMath: [['[latex]','[/latex]'], ['\\(','\\)']]} 
+            });
+        });
+    </script>
+
+
+    
+
+    <script src="/js/awesome-toc.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.awesome_toc({
+                overlay: true,
+                contentId: "post-content",
+            });
+        });
+    </script>
+
+
+    <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?2b50d7b664b2132aabe06c346fad3696";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+    
+
+    <script src="/js/jquery.githubRepoWidget.min.js"></script>
+
+
+    <!--kill ie6 -->
+<!--[if IE 6]>
+  <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
+<![endif]-->
+
+</body>
+</html>
