@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    
+
+    <title>
+      让UIWebview拥有超强的图片处理能力 | Developer Center 
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    
+      <meta name="author" content="Jim">
+    
+    
+
+    <meta name="description" content="首先，最近有个想法是让UIWebview支持webp，那么原生的webview引擎是不支持的，所以就有了如标题所写的想法。其实不仅仅局限于为了让其支持webp，如果能让webview的图片请求都走向自己实现的图片库，那么可以实现很多很多黑科技（比如每个图片加个app特定水印？或者说裁剪图片使webview能有更好的性能表现？很多很多的功能，不一一列举了）。
+
+关于缓存在开始讲解之前，我觉得有必要">
+<meta property="og:type" content="article">
+<meta property="og:title" content="让UIWebview拥有超强的图片处理能力 | Developer Center">
+<meta property="og:url" content="http://kuailejim.com/2016/07/02/让UIWebview拥有超强的图片处理能力/index.html">
+<meta property="og:site_name" content="Developer Center">
+<meta property="og:description" content="首先，最近有个想法是让UIWebview支持webp，那么原生的webview引擎是不支持的，所以就有了如标题所写的想法。其实不仅仅局限于为了让其支持webp，如果能让webview的图片请求都走向自己实现的图片库，那么可以实现很多很多黑科技（比如每个图片加个app特定水印？或者说裁剪图片使webview能有更好的性能表现？很多很多的功能，不一一列举了）。
+
+关于缓存在开始讲解之前，我觉得有必要">
+<meta property="og:image" content="http://kuailejim.com/2016/07/02/让UIWebview拥有超强的图片处理能力/1.png">
+<meta property="og:image" content="http://kuailejim.com/2016/07/02/让UIWebview拥有超强的图片处理能力/2.png">
+<meta property="og:image" content="http://kuailejim.com/2016/07/02/让UIWebview拥有超强的图片处理能力/3.png">
+<meta property="og:image" content="http://kuailejim.com/2016/07/02/让UIWebview拥有超强的图片处理能力/4.png">
+<meta property="og:image" content="http://kuailejim.com/2016/07/02/让UIWebview拥有超强的图片处理能力/5.png">
+<meta property="og:updated_time" content="2016-07-02T08:53:25.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="让UIWebview拥有超强的图片处理能力 | Developer Center">
+<meta name="twitter:description" content="首先，最近有个想法是让UIWebview支持webp，那么原生的webview引擎是不支持的，所以就有了如标题所写的想法。其实不仅仅局限于为了让其支持webp，如果能让webview的图片请求都走向自己实现的图片库，那么可以实现很多很多黑科技（比如每个图片加个app特定水印？或者说裁剪图片使webview能有更好的性能表现？很多很多的功能，不一一列举了）。
+
+关于缓存在开始讲解之前，我觉得有必要">
+<meta name="twitter:image" content="http://kuailejim.com/2016/07/02/让UIWebview拥有超强的图片处理能力/1.png">
+    
+    
+    
+      <link rel="icon" type="image/x-icon" href="/favicon.png">
+    
+    <link rel="stylesheet" href="/css/uno.css">
+    <link rel="stylesheet" href="/css/highlight.css">
+    <link rel="stylesheet" href="/css/archive.css">
+    <link rel="stylesheet" href="/css/china-social-icon.css">
+
+</head>
+<body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="icon icon-list btn-mobile-menu__icon"></i>
+        <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+
+<header class="panel-cover panel-cover--collapsed">
+
+
+  <div class="panel-main">
+
+  
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage">Developer Center</a></h1>
+        <hr class="panel-cover__divider" />
+
+        
+        <p class="panel-cover__description">
+          黄建敏(@kuailejim) | iOS Developer | Crazy Driver
+        </p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+
+        <div class="navigation-wrapper">
+
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+
+              
+                
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">博客</a></li>
+              
+                
+                <li class="navigation__item"><a href="http://www.jianshu.com/users/40e4dced948f" title="" class="">简书</a></li>
+              
+
+            </ul>
+          </nav>
+
+          <!-- ----------------------------
+To add a new social icon simply duplicate one of the list items from below
+and change the class in the <i> tag to match the desired social network
+and then add your link to the <a>. Here is a full list of social network
+classes that you can use:
+
+    icon-social-500px
+    icon-social-behance
+    icon-social-delicious
+    icon-social-designer-news
+    icon-social-deviant-art
+    icon-social-digg
+    icon-social-dribbble
+    icon-social-facebook
+    icon-social-flickr
+    icon-social-forrst
+    icon-social-foursquare
+    icon-social-github
+    icon-social-google-plus
+    icon-social-hi5
+    icon-social-instagram
+    icon-social-lastfm
+    icon-social-linkedin
+    icon-social-medium
+    icon-social-myspace
+    icon-social-path
+    icon-social-pinterest
+    icon-social-rdio
+    icon-social-reddit
+    icon-social-skype
+    icon-social-spotify
+    icon-social-stack-overflow
+    icon-social-steam
+    icon-social-stumbleupon
+    icon-social-treehouse
+    icon-social-tumblr
+    icon-social-twitter
+    icon-social-vimeo
+    icon-social-xbox
+    icon-social-yelp
+    icon-social-youtube
+    icon-social-zerply
+    icon-mail
+
+-------------------------------->
+
+<!-- add social info here -->
+
+
+
+<nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+    
+      <!-- Github -->
+      <li class="navigation__item">
+        <a href="https://github.com/kuailejim" title="Huno on GitHub">
+          <i class='icon icon-social-github'></i>
+          <span class="label">GitHub</span>
+        </a>
+      </li>
+    
+
+    <!-- China social icon -->
+
+      <li class="navigation__item">
+        <a href="http://weibo.com/huangjim/" title="">
+          <i class='icon cs-icon-weibo'></i>
+          <span class="label">Weibo</span>
+        </a>
+      </li>
+
+  </ul>
+</nav>
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay"></div>
+  </div>
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner entry">
+            
+
+<article class="post-container post-container--single">
+
+  <header class="post-header">
+    
+    <h1 class="post-title">让UIWebview拥有超强的图片处理能力</h1>
+
+    
+
+    <div class="post-meta">
+      <time datetime="2016-07-02" class="post-meta__date date">2016-07-02</time> 
+
+      <span class="post-meta__tags tags">
+
+          
+
+          
+
+      </span>
+    </div>
+    
+    
+
+  </header>
+
+  <section id="post-content" class="article-content post">
+    <blockquote>
+<p>首先，最近有个想法是让<strong>UIWebview支持webp</strong>，那么原生的webview引擎是不支持的，所以就有了如标题所写的想法。其实不仅仅局限于为了让其支持webp，如果能让webview的图片请求都走向自己实现的图片库，那么可以实现很多很多黑科技（比如每个图片加个app特定水印？或者说裁剪图片使webview能有更好的性能表现？很多很多的功能，不一一列举了）。</p>
+</blockquote>
+<h1 id="关于缓存"><a href="#关于缓存" class="headerlink" title="关于缓存"></a>关于缓存</h1><h6 id="在开始讲解之前，我觉得有必要先普及一下-NSURLRequest-cache-相关知识。"><a href="#在开始讲解之前，我觉得有必要先普及一下-NSURLRequest-cache-相关知识。" class="headerlink" title="在开始讲解之前，我觉得有必要先普及一下 NSURLRequest cache 相关知识。"></a>在开始讲解之前，我觉得有必要先普及一下 <em>NSURLRequest cache</em> 相关知识。</h6><ul>
+<li>webview和普通的NSURLRequest都是用同一套cache策略么，也就是说他们的cache共享吗？</li>
+<li>具体的cache策略是怎样的，是怎样产生cache的？如果webview请求过一个图片，而在webview外再次请求同一个图片，会用直接用cache么？</li>
+<li>系统原生提供的cache的稳定性？</li>
+</ul>
+<h6 id="带着这几个问题，我做了大量的实验，这里直接给出结果，因为这不是本文的重点。"><a href="#带着这几个问题，我做了大量的实验，这里直接给出结果，因为这不是本文的重点。" class="headerlink" title="带着这几个问题，我做了大量的实验，这里直接给出结果，因为这不是本文的重点。"></a>带着这几个问题，我做了大量的实验，这里直接给出结果，因为这不是本文的重点。</h6><ol>
+<li>两者的确是<strong>公用cache</strong>的。</li>
+<li>在实验中，webview请求过一个图片之后，用NSURLRequest请求同一个图片会产生两个结果。<br><strong>在前者请求完成后的短时间内直接进行下次请求，会重新请求而不会拿cache，而过一段时间后请求，则会拿cache，个人猜测是处理cache需要时间。</strong></li>
+<li>关于系统提供的cache，os随时有可能清空你的app cache，这是<strong>不可靠</strong>的！这也是为什么SDWebImage默认会有自己的一套缓存策略的原因。</li>
+</ol>
+<p>上述说的cache策略是建立在你正确理解并且用好的NSURLRequestCachePolicy的前提下的。为什么这么说呢？有些人会滥用NSURLRequestCachePolicy ，比如明明NSURLRequestReloadIgnoringLocalCacheData，却说怎么没缓存，这就有点蛋疼了。关于cache策略可以看看<a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/URLLoadingSystem/Concepts/CachePolicies.html" target="_blank" rel="external">官方文档</a>，比我说的清楚多了~</p>
+<p>#总结下：<br>无论采用哪种NSURLRequestCachePolicy，在请求的时候都会cache。而在下次请求（不包括<code>[webview reload]</code>，刷新会强制重新发请求）的时候，则会根据NSURLRequestCachePolicy的策略决定是否拿缓存。如果是NSURLRequestUseProtocolCachePolicy，还要根据对应的协议（http\https\ftp）的服务端提供的response来决定。</p>
+<h1 id="OK-缓存讲完，我们来看重点。"><a href="#OK-缓存讲完，我们来看重点。" class="headerlink" title="OK 缓存讲完，我们来看重点。"></a>OK 缓存讲完，我们来看重点。</h1><p>其实思路挺简单的，在之前介绍<a href="http://www.jianshu.com/p/bf14ab437feb" target="_blank" rel="external">hybrid app</a>的时候，已经介绍了NSURLProtocol这个神器的作用。这里其实也是用NSURLProtocol来达到目的。<br>想一想，无非就是拦截掉webview的请求，将本身在webview的URL Load System的请求抽出来，我们自己处理掉，然后组装成response返回给webview。对于webview而言是完全透明的，它不关心中途的网络请求是如何完成的，它只知道它发出了请求，并且收到response即可。<br><strong>换句话说即我们自己处理整个请求的所有过程。</strong><br>如下图所示：</p>
+<img src="/2016/07/02/让UIWebview拥有超强的图片处理能力/1.png" alt="1.png" title="">
+<p>简简单单看一下原理是很简单，但是就是因为这小小的动作我们可以做到很多原本没法让webview做到的事情。</p>
+<ul>
+<li>支持webp</li>
+<li>实现与自己实现的图片库一致的缓存策略</li>
+<li>将图片大小尺寸的URL拼接策略放在本地</li>
+</ul>
+<p><strong>支持webp：</strong>将图片请求在自己实现的图片库中完成，然后转成webview支持的data格式透传回去即可。</p>
+<p><strong>缓存：</strong>我们都知道系统的缓存是不可靠的，很多开发者会采用自己的缓存策略，而webview的请求如果不进行干预是没法做到走我们自己的缓存策略的，但是如文章所说，即可做到。</p>
+<p><strong>图片尺寸优化：</strong>往往对于H5而言，如果前端开发者没有注意图片尺寸问题，在PC和手机上图片都采用一个尺寸的话，这是十分不好的，手机屏幕小并不需要这么大尺寸的图。往往大多数的图片CDN都是会支持裁剪的，而拦截图片请求在URL上拼接size是一个解决方式。</p>
+<p>还有许许多多的功能，比如开头提到的水印，从我这个app打开的图片都被我加上了本app的icon，是不是很屌。</p>
+<p><em>这里有个小插曲：在撸demo的时候，我本想让demo中的SDWebImage请求同一个图片，结果发现怎么也走不到protocol中。搞了半天没法只能去看文档，发现如下：</em></p>
+<img src="/2016/07/02/让UIWebview拥有超强的图片处理能力/2.png" alt="2.png" title="">
+<p><strong>NSURLSession与NSURLConnection注册NSURLProtocol的方式是不同的！</strong></p>
+<p><a href="https://github.com/kuailejim/demo" target="_blank" rel="external">demo下载地址</a></p>
+<h1 id="代码演示"><a href="#代码演示" class="headerlink" title="代码演示"></a>代码演示</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line">+ (BOOL)canInitWithRequest:(NSURLRequest *)request &#123;</span><br><span class="line">    NSString *path = request.URL.path;</span><br><span class="line">    // 只处理是图片的URL请求</span><br><span class="line">    if ([path hasSuffix:@&quot;.jpg&quot;] || [path hasSuffix:@&quot;.jpeg&quot;] || [path hasSuffix:@&quot;.webp&quot;]) &#123;</span><br><span class="line">        if ([NSURLProtocol propertyForKey:WebviewImageProtocolHandledKey inRequest:request]) &#123;</span><br><span class="line">            return NO;</span><br><span class="line">        &#125;</span><br><span class="line">        return YES;</span><br><span class="line">    &#125;</span><br><span class="line">    return NO;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">+ (NSURLRequest *)canonicalRequestForRequest:(NSURLRequest *)request &#123;</span><br><span class="line">    return request;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)startLoading &#123;</span><br><span class="line">    // 将本地的缓存组装成报文传回去</span><br><span class="line">    NSData *data = [self imageDataWithURL:self.request.URL];</span><br><span class="line">    </span><br><span class="line">    if (data) &#123;</span><br><span class="line">        NSString *mimeType = @&quot;image/jpeg&quot;;</span><br><span class="line">        NSMutableDictionary *header = [[NSMutableDictionary alloc] initWithCapacity:2];</span><br><span class="line">        NSString *contentType = [mimeType stringByAppendingString:@&quot;;charset=UTF-8&quot;];</span><br><span class="line">        header[@&quot;Content-Type&quot;] = contentType;</span><br><span class="line">        header[@&quot;Content-Length&quot;] = [NSString stringWithFormat:@&quot;%lu&quot;, (unsigned long) data.length];</span><br><span class="line">        </span><br><span class="line">        NSHTTPURLResponse *httpResponse = [[NSHTTPURLResponse alloc] initWithURL:self.request.URL</span><br><span class="line">                                                                      statusCode:200</span><br><span class="line">                                                                     HTTPVersion:@&quot;1.1&quot;</span><br><span class="line">                                                                    headerFields:header];</span><br><span class="line">        </span><br><span class="line">        [self.client URLProtocol:self didReceiveResponse:httpResponse cacheStoragePolicy:NSURLCacheStorageNotAllowed];</span><br><span class="line">        [self.client URLProtocol:self didLoadData:data];</span><br><span class="line">        [self.client URLProtocolDidFinishLoading:self];</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        // 这里其实应该是图片库对于图片请求的处理，每个人实现的图片库不一样，所以我就直接以webview的方式请求了</span><br><span class="line">        NSMutableURLRequest *newRequest = [self.request mutableCopy];</span><br><span class="line">        newRequest.allHTTPHeaderFields = self.request.allHTTPHeaderFields;</span><br><span class="line">        [NSURLProtocol setProperty:@YES forKey:WebviewImageProtocolHandledKey inRequest:newRequest];</span><br><span class="line">        </span><br><span class="line">        self.connection = [NSURLConnection connectionWithRequest:newRequest delegate:self];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)stopLoading &#123;</span><br><span class="line">    [self.connection cancel];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (NSData*)imageDataWithURL:(NSURL*)url &#123;</span><br><span class="line">    // 假装这是一个缓存，这里抛砖引玉下，大家可以自己实现自己的图片缓存策略</span><br><span class="line">    if ([url.absoluteString isEqualToString:@&quot;http://kuailejim.com/images/background-cover.jpg&quot;]) &#123;</span><br><span class="line">        NSString *filePath = [[NSBundle mainBundle] pathForResource:@&quot;background-cover&quot; ofType:@&quot;jpg&quot;];</span><br><span class="line">        NSData *data = [NSData dataWithContentsOfFile:filePath];</span><br><span class="line">        return  data;</span><br><span class="line">    &#125;</span><br><span class="line">    return nil;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>由于每个开发团队可能有自己的图片处理库，所以我这里就只给出简单的思路，大家可以自行按照自己的图片库替代上述有注释的代码。</p>
+<h1 id="成果演示"><a href="#成果演示" class="headerlink" title="成果演示"></a>成果演示</h1><img src="/2016/07/02/让UIWebview拥有超强的图片处理能力/3.png" alt="3.png" title="">
+<img src="/2016/07/02/让UIWebview拥有超强的图片处理能力/4.png" alt="4.png" title="">
+<img src="/2016/07/02/让UIWebview拥有超强的图片处理能力/5.png" alt="5.png" title="">
+<p>可以很明显的看出，图片请求没了，因为走了本地的缓存。</p>
+<h1 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h1><p>本文只给出了如何进行网络请求替换，并且给出一个小demo，其实能做的远远不止这些。正如文中所说webp，图片尺寸优化等等，如果你感兴趣也可以自己撸一个demo玩玩~</p>
+
+  </section>
+
+  
+  
+
+<section class="post-comments">
+
+    <div class="ds-thread" data-thread-key="2016/07/02/让UIWebview拥有超强的图片处理能力/"></div>
+
+    <script type="text/javascript">
+      var duoshuoQuery = {short_name:"kuailejim"};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+        || document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+    </script> 
+
+</section>
+
+
+</article>
+
+
+            <footer class="footer">
+
+    <span class="footer__copyright">Stay Hungry, Stay Foolish.</span>
+    
+</footer>
+        </div>
+    </div>
+
+    <!-- js files -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/scale.fix.js"></script>
+    
+
+    
+
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript"> 
+        $(document).ready(function(){
+            MathJax.Hub.Config({ 
+                tex2jax: {inlineMath: [['[latex]','[/latex]'], ['\\(','\\)']]} 
+            });
+        });
+    </script>
+
+
+    
+
+    <script src="/js/awesome-toc.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.awesome_toc({
+                overlay: true,
+                contentId: "post-content",
+            });
+        });
+    </script>
+
+
+    <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?2b50d7b664b2132aabe06c346fad3696";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+    
+
+    <script src="/js/jquery.githubRepoWidget.min.js"></script>
+
+
+    <!--kill ie6 -->
+<!--[if IE 6]>
+  <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
+<![endif]-->
+
+</body>
+</html>
