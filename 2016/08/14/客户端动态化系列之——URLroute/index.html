@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    
+
+    <title>
+      客户端动态化系列之——URLroute | Developer Center 
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    
+      <meta name="author" content="Jim">
+    
+    
+
+    <meta name="description" content="对于客户端来说，发版本身就属于一种很高成本的行为。然而一个初创的app，会有各式各样的问题，而在初期也不会像大型app一般有一套成熟的处理异常机制。而这往往会造成许多问题，那么问题来了，如何在有限的开发资源下，做到客户端的动态化。并且实现降级、ABTest等等一系列的行为呢？
+
+What we want？如前文提到，当版本迭代时，首当其冲的就是版本的问题。作为团队的开发，我曾经花了很多时间在思考">
+<meta property="og:type" content="article">
+<meta property="og:title" content="客户端动态化系列之——URLroute | Developer Center">
+<meta property="og:url" content="http://kuailejim.com/2016/08/14/客户端动态化系列之——URLroute/index.html">
+<meta property="og:site_name" content="Developer Center">
+<meta property="og:description" content="对于客户端来说，发版本身就属于一种很高成本的行为。然而一个初创的app，会有各式各样的问题，而在初期也不会像大型app一般有一套成熟的处理异常机制。而这往往会造成许多问题，那么问题来了，如何在有限的开发资源下，做到客户端的动态化。并且实现降级、ABTest等等一系列的行为呢？
+
+What we want？如前文提到，当版本迭代时，首当其冲的就是版本的问题。作为团队的开发，我曾经花了很多时间在思考">
+<meta property="og:image" content="http://kuailejim.com/2016/08/14/客户端动态化系列之——URLroute/1.png">
+<meta property="og:image" content="http://kuailejim.com/2016/08/14/客户端动态化系列之——URLroute/2.png">
+<meta property="og:image" content="http://kuailejim.com/2016/08/14/客户端动态化系列之——URLroute/3.jpeg">
+<meta property="og:image" content="http://kuailejim.com/2016/08/14/客户端动态化系列之——URLroute/4.png">
+<meta property="og:updated_time" content="2016-08-14T09:50:32.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="客户端动态化系列之——URLroute | Developer Center">
+<meta name="twitter:description" content="对于客户端来说，发版本身就属于一种很高成本的行为。然而一个初创的app，会有各式各样的问题，而在初期也不会像大型app一般有一套成熟的处理异常机制。而这往往会造成许多问题，那么问题来了，如何在有限的开发资源下，做到客户端的动态化。并且实现降级、ABTest等等一系列的行为呢？
+
+What we want？如前文提到，当版本迭代时，首当其冲的就是版本的问题。作为团队的开发，我曾经花了很多时间在思考">
+<meta name="twitter:image" content="http://kuailejim.com/2016/08/14/客户端动态化系列之——URLroute/1.png">
+    
+    
+    
+      <link rel="icon" type="image/x-icon" href="/favicon.png">
+    
+    <link rel="stylesheet" href="/css/uno.css">
+    <link rel="stylesheet" href="/css/highlight.css">
+    <link rel="stylesheet" href="/css/archive.css">
+    <link rel="stylesheet" href="/css/china-social-icon.css">
+
+</head>
+<body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="icon icon-list btn-mobile-menu__icon"></i>
+        <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+
+<header class="panel-cover panel-cover--collapsed">
+
+
+  <div class="panel-main">
+
+  
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage">Developer Center</a></h1>
+        <hr class="panel-cover__divider" />
+
+        
+        <p class="panel-cover__description">
+          黄建敏(@kuailejim) | iOS Developer | Crazy Driver
+        </p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+
+        <div class="navigation-wrapper">
+
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+
+              
+                
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">博客</a></li>
+              
+                
+                <li class="navigation__item"><a href="http://www.jianshu.com/users/40e4dced948f" title="" class="">简书</a></li>
+              
+
+            </ul>
+          </nav>
+
+          <!-- ----------------------------
+To add a new social icon simply duplicate one of the list items from below
+and change the class in the <i> tag to match the desired social network
+and then add your link to the <a>. Here is a full list of social network
+classes that you can use:
+
+    icon-social-500px
+    icon-social-behance
+    icon-social-delicious
+    icon-social-designer-news
+    icon-social-deviant-art
+    icon-social-digg
+    icon-social-dribbble
+    icon-social-facebook
+    icon-social-flickr
+    icon-social-forrst
+    icon-social-foursquare
+    icon-social-github
+    icon-social-google-plus
+    icon-social-hi5
+    icon-social-instagram
+    icon-social-lastfm
+    icon-social-linkedin
+    icon-social-medium
+    icon-social-myspace
+    icon-social-path
+    icon-social-pinterest
+    icon-social-rdio
+    icon-social-reddit
+    icon-social-skype
+    icon-social-spotify
+    icon-social-stack-overflow
+    icon-social-steam
+    icon-social-stumbleupon
+    icon-social-treehouse
+    icon-social-tumblr
+    icon-social-twitter
+    icon-social-vimeo
+    icon-social-xbox
+    icon-social-yelp
+    icon-social-youtube
+    icon-social-zerply
+    icon-mail
+
+-------------------------------->
+
+<!-- add social info here -->
+
+
+
+<nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+    
+      <!-- Github -->
+      <li class="navigation__item">
+        <a href="https://github.com/kuailejim" title="Huno on GitHub">
+          <i class='icon icon-social-github'></i>
+          <span class="label">GitHub</span>
+        </a>
+      </li>
+    
+
+    <!-- China social icon -->
+
+      <li class="navigation__item">
+        <a href="http://weibo.com/huangjim/" title="">
+          <i class='icon cs-icon-weibo'></i>
+          <span class="label">Weibo</span>
+        </a>
+      </li>
+
+  </ul>
+</nav>
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay"></div>
+  </div>
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner entry">
+            
+
+<article class="post-container post-container--single">
+
+  <header class="post-header">
+    
+    <h1 class="post-title">客户端动态化系列之——URLroute</h1>
+
+    
+
+    <div class="post-meta">
+      <time datetime="2016-08-14" class="post-meta__date date">2016-08-14</time> 
+
+      <span class="post-meta__tags tags">
+
+          
+
+          
+
+      </span>
+    </div>
+    
+    
+
+  </header>
+
+  <section id="post-content" class="article-content post">
+    <blockquote>
+<p>对于客户端来说，发版本身就属于一种很高成本的行为。然而一个初创的app，会有各式各样的问题，而在初期也不会像大型app一般有一套成熟的处理异常机制。而这往往会造成许多问题，那么问题来了，如何在有限的开发资源下，做到客户端的动态化。并且实现降级、ABTest等等一系列的行为呢？</p>
+</blockquote>
+<h2 id="What-we-want？"><a href="#What-we-want？" class="headerlink" title="What we want？"></a>What we want？</h2><p>如前文提到，当版本迭代时，首当其冲的就是版本的问题。作为团队的开发，我曾经花了很多时间在思考一个问题。<strong>如何能让我们的架构模型变得优雅，变得像橡皮泥一般能随着业务的发展迅速变形，</strong>特别是在一个创业公司，迫切需要一个强大的架构体系能支撑业务的快速发展。</p>
+<p><strong>那么事情就变得很简单了，在维持业务发展速度不变的情况下，尽可能减少发版的频率，以技术的方式在不发版的情况下满足“伪发版”。</strong></p>
+<p>当然，还有其他的一些想法，会在后文提到：</p>
+<ul>
+<li>ABTest</li>
+<li>灰度</li>
+<li>降级策略</li>
+<li>动态调用本地服务</li>
+</ul>
+<h2 id="What-to-do"><a href="#What-to-do" class="headerlink" title="What to do?"></a>What to do?</h2><p>有了想法知道，思路就比较清晰了，会针对性的对目的进行处理。  </p>
+<h3 id="“伪发版”"><a href="#“伪发版”" class="headerlink" title="“伪发版”"></a>“伪发版”</h3><p>对于app来说，伪发版的方案已经在业内比较成熟了。我们可以用<strong>weex/react native</strong>（以同一JS代码，在H5、iOS、Android同时实现同一页面）的方式来实现在不发版的情况下实现页面级别的更新。   </p>
+<p>我们试想一下，虽然weex实现了页面的动态更新。但是却没法很优雅地处理新页面与老页面的跳转关系。打个比方，一个native页面A已经在代码里写死点击按钮跳转页面B，此时就算用weex/rn写了一个新页面，也是很难跳转的(当然如果两个页面都是weex/rn写的，就不会存在这样的问题，但是在大多数应用场景里，还是会存在部分weex/rn，部分native的页面)。    </p>
+<p>即 A -&gt; B 是一个既定的关系。<strong>为了达到动态化，必然需要对整个app的导航进行统一处理。</strong><br>这就是URLRoute要做的事情！</p>
+<img src="/2016/08/14/客户端动态化系列之——URLroute/1.png" alt="1.png" title="">
+<p>正如其名，URLRoute会有一个<strong>路由规则</strong>。    </p>
+<h3 id="URLRoute"><a href="#URLRoute" class="headerlink" title="URLRoute"></a>URLRoute</h3><p><strong>而动态化的秘诀就是将无法变动的逻辑代码维护成文本。即 代码 -&gt; 文本 。</strong>  </p>
+<p>文本没有编译、签名等等发版需要的步骤，它的更新完全是可以由文件的更新完成，而这恰恰是不需要发版的。    </p>
+<p>拿iOS为例，我实现了一个<strong>URLRoute</strong>的库，其中的处理流程可以由下图所示：  </p>
+<img src="/2016/08/14/客户端动态化系列之——URLroute/2.png" alt="2.png" title="">
+<p>其中URL与对应的class的映射是由一个文件维护的，如图所示：  </p>
+<img src="/2016/08/14/客户端动态化系列之——URLroute/3.jpeg" alt="3.jpeg" title="">
+<p>通过维护一个<strong>dictionary(map)</strong>维护URL与本地页面或服务的关系。</p>
+<h3 id="ABTest-amp-amp-灰度"><a href="#ABTest-amp-amp-灰度" class="headerlink" title="ABTest &amp;&amp; 灰度"></a>ABTest &amp;&amp; 灰度</h3><p>任何业务在发展的阶段都不可避免会产生分歧，此时需要如果业务架构支持<strong>对不同的人群命中不同粒度的产品</strong>，并且给出数据以展示哪一种结果更好，这对于思考产品的人有更多的选择余地。   </p>
+<p>而通过URLRoute，我们完全可以针<strong>对不同的人群派发不同的映射文件</strong>达到<strong>ABTest</strong>的目的。  </p>
+<p>甚至在某一个版本上可以做到<strong>灰度</strong>，10%-&gt;20%-&gt;…-&gt;100%。</p>
+<h3 id="降级策略"><a href="#降级策略" class="headerlink" title="降级策略"></a>降级策略</h3><p>试想一下，如果以上线的项目产生了重大BUG怎么办。对于iOS来说，可以通过Runtime的方式达到patch。但是对于Android来说，现有的三种方案：classloader，更改jar包，更改apk。后两者更不用说，我们并不是一个apk。而前者在现如今的动态方案中逐渐被抛弃。<strong>其实都不适合我们，这些其实都需要一套完整的解决方案，并不仅仅是导入库就行，还要考虑与server的交互等。</strong>    </p>
+<p>那么如何做到一个方式，<strong>能以最简单的方式做到在产生BUG时，以最小的成本并且在两端以同样的策略去做到修复或者降级呢？</strong>    </p>
+<p>答案是我们可以<strong>通过更改映射文件</strong>，将原先有问题的URL对应的value替换掉，即A-&gt;B变成A-&gt;C(C可以是一个error页面，也可以是一个weex/rn页面)。当然你会问如果本地没有实现C怎么办？没关系，我们删掉那条URL记录，<strong>当URLRoute拦截不到URL时，会以webview的形式打开，这样就降级成H5了</strong>。  </p>
+<img src="/2016/08/14/客户端动态化系列之——URLroute/4.png" alt="4.png" title="">
+<h3 id="动态调用本地服务"><a href="#动态调用本地服务" class="headerlink" title="动态调用本地服务"></a>动态调用本地服务</h3><p>URLRoute不仅仅处理了页面之间的跳转逻辑，也可以处理service。这里的service可以理解为任何native的行为，比如<strong>登录、强制更新、发网络请求等等</strong>。   </p>
+<p>我们可以事先<strong>注册好对应的module，通过URL调用对应的service</strong>。    </p>
+<p>这是很重要的，比如我们产生了重大BUG，我们就可以<strong>强制登出用户，甚至强制所有页面都跳到error页面等等</strong>。</p>
+<h2 id="How-to-do"><a href="#How-to-do" class="headerlink" title="How to do?"></a>How to do?</h2><p>我们可以在要实现URLRoute的class，在plist文件里声明，<strong>key为对应的host + path，value为对应的class name</strong>。 </p>
+<pre><code>// 默认调用方式
+OpenURL(@&quot;http://m.kuailejim.com/home?id=552131&quot;);
+// 如果需要传URL不能表达的参数（Object参数）
+OpenURLWithParams(@&quot;http://m.kuailejim.com/home?id=552131&quot;, paramsDictionary);
+</code></pre><p>这里的scheme为http，是因为我在URLRoute里做了处理，当这里的key（m.kuailejim.com/home）没有被拦截到即在plist文件中并<strong>没有找到对应的class来处理时，我会判断scheme是否为http/https，如果是，则会跳到H5以实现降级</strong>。  </p>
+<p>我们知道，URL传参对于<strong>object类型</strong>是不友好的，于是需要实现一个能带dictionary（map）的方法，并且在URLRoute内部实现基于key/value形式参数的解析。</p>
+<p>对应的class需要实现下述方法，这样URLRoute通过runtime动态创建对应的class，并且调用class已经实现的代理方法达到处理的效果：</p>
+<pre><code>- (id)initWithUrlRequest:(URLRouteRequest *)request;
+</code></pre><p>这里还需要注意，在URLRoute里要<strong>hook对应的viewdidappear方法来拿到当前的view controller</strong>，才能做到push和model的操作。如果是model操作还需实现一个navigation controller（因为有可能会在新的页面里push）  </p>
+<p>AOP统一处理，例如想在跳转时对所有url记录埋点等功能，这个很好理解，只要在<strong>URLRoute里在实现拦截前统一做处理就行</strong>。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这只是客户端动态化的第一步，<strong>baby steps to big dreams</strong>。</p>
+
+  </section>
+
+  
+  
+
+<section class="post-comments">
+
+    <div class="ds-thread" data-thread-key="2016/08/14/客户端动态化系列之——URLroute/"></div>
+
+    <script type="text/javascript">
+      var duoshuoQuery = {short_name:"kuailejim"};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+        || document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+    </script> 
+
+</section>
+
+
+</article>
+
+
+            <footer class="footer">
+
+    <span class="footer__copyright">Stay Hungry, Stay Foolish.</span>
+    
+</footer>
+        </div>
+    </div>
+
+    <!-- js files -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/scale.fix.js"></script>
+    
+
+    
+
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript"> 
+        $(document).ready(function(){
+            MathJax.Hub.Config({ 
+                tex2jax: {inlineMath: [['[latex]','[/latex]'], ['\\(','\\)']]} 
+            });
+        });
+    </script>
+
+
+    
+
+    <script src="/js/awesome-toc.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.awesome_toc({
+                overlay: true,
+                contentId: "post-content",
+            });
+        });
+    </script>
+
+
+    <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?2b50d7b664b2132aabe06c346fad3696";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+    
+
+    <script src="/js/jquery.githubRepoWidget.min.js"></script>
+
+
+    <!--kill ie6 -->
+<!--[if IE 6]>
+  <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
+<![endif]-->
+
+</body>
+</html>
