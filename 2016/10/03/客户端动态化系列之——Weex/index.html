@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    
+
+    <title>
+      客户端动态化系列之——Weex | Developer Center 
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    
+      <meta name="author" content="Jim">
+    
+    
+
+    <meta name="description" content="客户端动态化系列之——Weex
+在前端越来越火的年代，逐渐衍生出类似React Native、Weex等开发套件。所达到的目的挺简单的，达到在多个平台下共用一份代码，节省开发成本，提高开发效率。其次，由于JavaScript语言的特殊性，能动态更新页面而不需要发版。基于这两点，越来越多的个人开发者&amp;amp;公司开始尝试它们。
+
+
+本文将从个人开发实践项目出发，发表一些对于Weex的看法和在项目中的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="客户端动态化系列之——Weex | Developer Center">
+<meta property="og:url" content="http://kuailejim.com/2016/10/03/客户端动态化系列之——Weex/index.html">
+<meta property="og:site_name" content="Developer Center">
+<meta property="og:description" content="客户端动态化系列之——Weex
+在前端越来越火的年代，逐渐衍生出类似React Native、Weex等开发套件。所达到的目的挺简单的，达到在多个平台下共用一份代码，节省开发成本，提高开发效率。其次，由于JavaScript语言的特殊性，能动态更新页面而不需要发版。基于这两点，越来越多的个人开发者&amp;amp;公司开始尝试它们。
+
+
+本文将从个人开发实践项目出发，发表一些对于Weex的看法和在项目中的">
+<meta property="og:image" content="http://kuailejim.com/2016/10/03/客户端动态化系列之——Weex/1.png">
+<meta property="og:updated_time" content="2016-10-03T15:35:10.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="客户端动态化系列之——Weex | Developer Center">
+<meta name="twitter:description" content="客户端动态化系列之——Weex
+在前端越来越火的年代，逐渐衍生出类似React Native、Weex等开发套件。所达到的目的挺简单的，达到在多个平台下共用一份代码，节省开发成本，提高开发效率。其次，由于JavaScript语言的特殊性，能动态更新页面而不需要发版。基于这两点，越来越多的个人开发者&amp;amp;公司开始尝试它们。
+
+
+本文将从个人开发实践项目出发，发表一些对于Weex的看法和在项目中的">
+<meta name="twitter:image" content="http://kuailejim.com/2016/10/03/客户端动态化系列之——Weex/1.png">
+    
+    
+    
+      <link rel="icon" type="image/x-icon" href="/favicon.png">
+    
+    <link rel="stylesheet" href="/css/uno.css">
+    <link rel="stylesheet" href="/css/highlight.css">
+    <link rel="stylesheet" href="/css/archive.css">
+    <link rel="stylesheet" href="/css/china-social-icon.css">
+
+</head>
+<body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="icon icon-list btn-mobile-menu__icon"></i>
+        <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+
+<header class="panel-cover panel-cover--collapsed">
+
+
+  <div class="panel-main">
+
+  
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage">Developer Center</a></h1>
+        <hr class="panel-cover__divider" />
+
+        
+        <p class="panel-cover__description">
+          黄建敏(@kuailejim) | iOS Developer | Crazy Driver
+        </p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+
+        <div class="navigation-wrapper">
+
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+
+              
+                
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">博客</a></li>
+              
+                
+                <li class="navigation__item"><a href="http://www.jianshu.com/users/40e4dced948f" title="" class="">简书</a></li>
+              
+
+            </ul>
+          </nav>
+
+          <!-- ----------------------------
+To add a new social icon simply duplicate one of the list items from below
+and change the class in the <i> tag to match the desired social network
+and then add your link to the <a>. Here is a full list of social network
+classes that you can use:
+
+    icon-social-500px
+    icon-social-behance
+    icon-social-delicious
+    icon-social-designer-news
+    icon-social-deviant-art
+    icon-social-digg
+    icon-social-dribbble
+    icon-social-facebook
+    icon-social-flickr
+    icon-social-forrst
+    icon-social-foursquare
+    icon-social-github
+    icon-social-google-plus
+    icon-social-hi5
+    icon-social-instagram
+    icon-social-lastfm
+    icon-social-linkedin
+    icon-social-medium
+    icon-social-myspace
+    icon-social-path
+    icon-social-pinterest
+    icon-social-rdio
+    icon-social-reddit
+    icon-social-skype
+    icon-social-spotify
+    icon-social-stack-overflow
+    icon-social-steam
+    icon-social-stumbleupon
+    icon-social-treehouse
+    icon-social-tumblr
+    icon-social-twitter
+    icon-social-vimeo
+    icon-social-xbox
+    icon-social-yelp
+    icon-social-youtube
+    icon-social-zerply
+    icon-mail
+
+-------------------------------->
+
+<!-- add social info here -->
+
+
+
+<nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+    
+      <!-- Github -->
+      <li class="navigation__item">
+        <a href="https://github.com/kuailejim" title="Huno on GitHub">
+          <i class='icon icon-social-github'></i>
+          <span class="label">GitHub</span>
+        </a>
+      </li>
+    
+
+    <!-- China social icon -->
+
+      <li class="navigation__item">
+        <a href="http://weibo.com/huangjim/" title="">
+          <i class='icon cs-icon-weibo'></i>
+          <span class="label">Weibo</span>
+        </a>
+      </li>
+
+  </ul>
+</nav>
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay"></div>
+  </div>
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner entry">
+            
+
+<article class="post-container post-container--single">
+
+  <header class="post-header">
+    
+    <h1 class="post-title">客户端动态化系列之——Weex</h1>
+
+    
+
+    <div class="post-meta">
+      <time datetime="2016-10-03" class="post-meta__date date">2016-10-03</time> 
+
+      <span class="post-meta__tags tags">
+
+          
+
+          
+
+      </span>
+    </div>
+    
+    
+
+  </header>
+
+  <section id="post-content" class="article-content post">
+    <h1 id="客户端动态化系列之——Weex"><a href="#客户端动态化系列之——Weex" class="headerlink" title="客户端动态化系列之——Weex"></a>客户端动态化系列之——Weex</h1><blockquote>
+<p>在前端越来越火的年代，逐渐衍生出类似React Native、Weex等开发套件。所达到的目的挺简单的，达到在多个平台下共用一份代码，节省开发成本，提高开发效率。其次，由于JavaScript语言的特殊性，能动态更新页面而不需要发版。基于这两点，越来越多的个人开发者&amp;公司开始尝试它们。</p>
+</blockquote>
+<img src="/2016/10/03/客户端动态化系列之——Weex/1.png" alt="1.png" title="">
+<p>本文将从个人开发实践项目出发，发表一些对于Weex的看法和在项目中的实战经历。不涉及具体原理和概念性的东西，读者可以自行去Weex官网查阅。</p>
+<h1 id="Weex原理"><a href="#Weex原理" class="headerlink" title="Weex原理"></a>Weex原理</h1><p>大体上和React Native一致，都是一个“放大版”的<strong>JSBrdige</strong>。其核心无非就是自定义了一套DSL(.we)，配合vue实现数据绑定、vdom等等功能。再通过native端与JS端的数据、API交互使得最终体现为native的调用过程。  </p>
+<p>而在这过程中，<strong>iOS用了自带的引擎JavaScriptCore &amp; Android则是Google V8</strong>。在这过程中有个坑，iOS版本Weex有<strong>内存泄漏</strong>的情况（Android没有），原因是JS Framework（Weex JS端的主程）并没有像V8一样hidden class的行为，GC回收不是很及时。Weex开发团队的同事发现了此bug，并在后续的版本中修复。  </p>
+<p>OK，我认为对于“应用框架者”来说，不用去care具体实现的原理。只需要了解怎么使用即可，毕竟这只是一个工具。如果是为了学习，可以去阅读，而对于“使用者”来说，<strong>快速地入门则是王道</strong>。  </p>
+<p>而Weex的使用，对于native来说，无非就是针对具体的业务场景实现<strong>Handler、Module、Component</strong>。</p>
+<h1 id="Handler"><a href="#Handler" class="headerlink" title="Handler"></a>Handler</h1><p>我们可以把Weex看做是一个提供了基础套件的UI渲染库。<strong>核心功能还是需要开发者自己来实现</strong>，比如：图片下载逻辑、网络请求、导航跳转等等。  </p>
+<p>所以开发者首先要关注的就是需要静态分析自己当前工程所需的功能，看看Weex需要你实现的handler中有哪些你要用到的，并实现它们。<br>比如在我的项目中，我就需要实现图片下载逻辑，于是实现并注册。  </p>
+<p><code>[WXSDKEngine registerHandler:[CNCWeexImageLoaderImplement new] withProtocol:@protocol(WXImgLoaderProtocol)];</code>  </p>
+<h1 id="Module"><a href="#Module" class="headerlink" title="Module"></a>Module</h1><p>Module可以理解为<strong>JS端需要调用native才能处理的逻辑，并且在JS&lt;-&gt;native进行交互</strong>。这么说有点抽象，举个具体的例子：比如在JS端想访问native端的数据库（coredata、realm等），就需要实现一个module来满足JS调用native写好的module以实现native的逻辑。  </p>
+<p>在我的实战项目中，我选择用module的方式实现网络请求与导航跳转。<br><code>[WXSDKEngine registerModule:@&quot;urlRoute&quot; withClass:[CNCWeexURLRouteModule class]];</code><br><code>[WXSDKEngine registerModule:@&quot;networkRequest&quot; withClass:[CNCWeexURLRouteModule class]];</code></p>
+<h1 id="Component"><a href="#Component" class="headerlink" title="Component"></a>Component</h1><p>Component很好理解，要实现一个跑马灯UI的效果，在native端实现，并且注册到JS。JS端调用，即可展示出跑马灯。这就是Component，<strong>在JS满足不了或者实现成本很高的时候，则可以在native端实现Component供JS调用</strong>。  </p>
+<p>由于第一次试水Weex，并没有采取很复杂的UI，就没有用Component。  </p>
+<h1 id="踩过的坑"><a href="#踩过的坑" class="headerlink" title="踩过的坑"></a>踩过的坑</h1><p>JS中this关键字的用法与Objc不同，<strong>this的作用域仅在当前对象</strong>。而在JS中函数也算一个对象。如果在函数中套一个函数，此时用this，只能代表外层函数。而非Objc一样代表整个最外层对象，需要注意！  </p>
+<p>业务中碰到一个场景，需要在某个场景，<strong>native端主动调用JS</strong>。而Weex提供给外部的API并没有提供这样的能力，仅仅是在JS主动调native方法时传一个callback，并且在native方法执行完成时，callback销毁。而业务场景却需要在将来执行回传下来的callback。翻看源码，只能自己实现了。这里给个思路：  </p>
+<p>其实在Weex的实现中（不贴源码了），会判断native实现的方法（即给JS调用的方法，比如module实现的方法）的入参类型。如果是声明成WXModuleCallback，则Weex内部会进行处理，并转成block给iOS（Android同理）。而如果不是WXModuleCallback，则会透传一个String（weex标记的方法ID）下来，<strong>这很关键。于是我们可以投机取巧地把入参改成String，记录下这个String。在后期想调这个JS方法时，写如下代码即可</strong><br><code>[[WXSDKManager bridgeMgr] callBack:weexInstance.instanceId funcId:aliveCallBackID params:params keepAlive:YES];</code></p>
+<h1 id="看法"><a href="#看法" class="headerlink" title="看法"></a>看法</h1><p>Weex相比React Native，坑还是比较多的。但是从“使用者”角度来说，Weex方便很多。但是对于存在很多复杂业务场景的开发者来说，必然会去学习其原理，而此时Weex相比RN就没那么友善了。  </p>
+<p>笔者因为在阿里，更加支持Weex，也希望它变得越来越好。  </p>
+<p><strong>无论采用哪种方式，两者都能实现客户端的动态化。而这对于一些多变的页面来说，是一种新的选择方式。</strong>  </p>
+<p>这是客户端动态化系列的第二篇文章，读者可以看前篇<a href="http://www.jianshu.com/p/18b915735932" target="_blank" rel="external">客户端动态化系列之——URLRoute</a>，相信你对动态化有更深的理解。</p>
+
+  </section>
+
+  
+  
+
+<section class="post-comments">
+
+    <div class="ds-thread" data-thread-key="2016/10/03/客户端动态化系列之——Weex/"></div>
+
+    <script type="text/javascript">
+      var duoshuoQuery = {short_name:"kuailejim"};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+        || document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+    </script> 
+
+</section>
+
+
+</article>
+
+
+            <footer class="footer">
+
+    <span class="footer__copyright">Stay Hungry, Stay Foolish.</span>
+    
+</footer>
+        </div>
+    </div>
+
+    <!-- js files -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/scale.fix.js"></script>
+    
+
+    
+
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript"> 
+        $(document).ready(function(){
+            MathJax.Hub.Config({ 
+                tex2jax: {inlineMath: [['[latex]','[/latex]'], ['\\(','\\)']]} 
+            });
+        });
+    </script>
+
+
+    
+
+    <script src="/js/awesome-toc.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.awesome_toc({
+                overlay: true,
+                contentId: "post-content",
+            });
+        });
+    </script>
+
+
+    <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?2b50d7b664b2132aabe06c346fad3696";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+    
+
+    <script src="/js/jquery.githubRepoWidget.min.js"></script>
+
+
+    <!--kill ie6 -->
+<!--[if IE 6]>
+  <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
+<![endif]-->
+
+</body>
+</html>
