@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    
+
+    <title>
+      手把手教你改写别人的app | Developer Center 
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    
+      <meta name="author" content="Jim">
+    
+    
+
+    <meta name="description" content="作为一名开发工程师，总有一点点（geek）想搞事的心思。而对于我而言，喜欢研究一些黑魔法，并且在适时的时候向别人炫技。当用到一些不满意的app功能时，总想着把这些功能改掉（或者去掉）来满足自己需求，更甚至可以debug别人的app。如果你对上述内容感兴趣，那就看下去，绝对不会让你失望。
+
+
+背景介绍自从微信出了消息撤回之后，有时候跟一些比较在意的人聊天的时候，就会遇到消息被撤回。然而内心是非常想">
+<meta property="og:type" content="article">
+<meta property="og:title" content="手把手教你改写别人的app | Developer Center">
+<meta property="og:url" content="http://kuailejim.com/2016/10/22/手把手教你改写别人的app/index.html">
+<meta property="og:site_name" content="Developer Center">
+<meta property="og:description" content="作为一名开发工程师，总有一点点（geek）想搞事的心思。而对于我而言，喜欢研究一些黑魔法，并且在适时的时候向别人炫技。当用到一些不满意的app功能时，总想着把这些功能改掉（或者去掉）来满足自己需求，更甚至可以debug别人的app。如果你对上述内容感兴趣，那就看下去，绝对不会让你失望。
+
+
+背景介绍自从微信出了消息撤回之后，有时候跟一些比较在意的人聊天的时候，就会遇到消息被撤回。然而内心是非常想">
+<meta property="og:image" content="http://kuailejim.com/2016/10/22/手把手教你改写别人的app/1.jpg">
+<meta property="og:image" content="http://kuailejim.com/2016/10/22/手把手教你改写别人的app/2.png">
+<meta property="og:image" content="http://kuailejim.com/2016/10/22/手把手教你改写别人的app/3.png">
+<meta property="og:image" content="http://kuailejim.com/2016/10/22/手把手教你改写别人的app/4.png">
+<meta property="og:image" content="http://kuailejim.com/2016/10/22/手把手教你改写别人的app/5.png">
+<meta property="og:image" content="http://kuailejim.com/2016/10/22/手把手教你改写别人的app/6.png">
+<meta property="og:image" content="http://kuailejim.com/2016/10/22/手把手教你改写别人的app/7.png">
+<meta property="og:image" content="http://kuailejim.com/2016/10/22/手把手教你改写别人的app/8.png">
+<meta property="og:updated_time" content="2016-10-22T13:03:32.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="手把手教你改写别人的app | Developer Center">
+<meta name="twitter:description" content="作为一名开发工程师，总有一点点（geek）想搞事的心思。而对于我而言，喜欢研究一些黑魔法，并且在适时的时候向别人炫技。当用到一些不满意的app功能时，总想着把这些功能改掉（或者去掉）来满足自己需求，更甚至可以debug别人的app。如果你对上述内容感兴趣，那就看下去，绝对不会让你失望。
+
+
+背景介绍自从微信出了消息撤回之后，有时候跟一些比较在意的人聊天的时候，就会遇到消息被撤回。然而内心是非常想">
+<meta name="twitter:image" content="http://kuailejim.com/2016/10/22/手把手教你改写别人的app/1.jpg">
+    
+    
+    
+      <link rel="icon" type="image/x-icon" href="/favicon.png">
+    
+    <link rel="stylesheet" href="/css/uno.css">
+    <link rel="stylesheet" href="/css/highlight.css">
+    <link rel="stylesheet" href="/css/archive.css">
+    <link rel="stylesheet" href="/css/china-social-icon.css">
+
+</head>
+<body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="icon icon-list btn-mobile-menu__icon"></i>
+        <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+
+<header class="panel-cover panel-cover--collapsed">
+
+
+  <div class="panel-main">
+
+  
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage">Developer Center</a></h1>
+        <hr class="panel-cover__divider" />
+
+        
+        <p class="panel-cover__description">
+          黄建敏(@kuailejim) | iOS Developer | Crazy Driver
+        </p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+
+        <div class="navigation-wrapper">
+
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+
+              
+                
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">博客</a></li>
+              
+                
+                <li class="navigation__item"><a href="http://www.jianshu.com/users/40e4dced948f" title="" class="">简书</a></li>
+              
+
+            </ul>
+          </nav>
+
+          <!-- ----------------------------
+To add a new social icon simply duplicate one of the list items from below
+and change the class in the <i> tag to match the desired social network
+and then add your link to the <a>. Here is a full list of social network
+classes that you can use:
+
+    icon-social-500px
+    icon-social-behance
+    icon-social-delicious
+    icon-social-designer-news
+    icon-social-deviant-art
+    icon-social-digg
+    icon-social-dribbble
+    icon-social-facebook
+    icon-social-flickr
+    icon-social-forrst
+    icon-social-foursquare
+    icon-social-github
+    icon-social-google-plus
+    icon-social-hi5
+    icon-social-instagram
+    icon-social-lastfm
+    icon-social-linkedin
+    icon-social-medium
+    icon-social-myspace
+    icon-social-path
+    icon-social-pinterest
+    icon-social-rdio
+    icon-social-reddit
+    icon-social-skype
+    icon-social-spotify
+    icon-social-stack-overflow
+    icon-social-steam
+    icon-social-stumbleupon
+    icon-social-treehouse
+    icon-social-tumblr
+    icon-social-twitter
+    icon-social-vimeo
+    icon-social-xbox
+    icon-social-yelp
+    icon-social-youtube
+    icon-social-zerply
+    icon-mail
+
+-------------------------------->
+
+<!-- add social info here -->
+
+
+
+<nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+    
+      <!-- Github -->
+      <li class="navigation__item">
+        <a href="https://github.com/kuailejim" title="Huno on GitHub">
+          <i class='icon icon-social-github'></i>
+          <span class="label">GitHub</span>
+        </a>
+      </li>
+    
+
+    <!-- China social icon -->
+
+      <li class="navigation__item">
+        <a href="http://weibo.com/huangjim/" title="">
+          <i class='icon cs-icon-weibo'></i>
+          <span class="label">Weibo</span>
+        </a>
+      </li>
+
+  </ul>
+</nav>
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay"></div>
+  </div>
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner entry">
+            
+
+<article class="post-container post-container--single">
+
+  <header class="post-header">
+    
+    <h1 class="post-title">手把手教你改写别人的app</h1>
+
+    
+
+    <div class="post-meta">
+      <time datetime="2016-10-22" class="post-meta__date date">2016-10-22</time> 
+
+      <span class="post-meta__tags tags">
+
+          
+
+          
+
+      </span>
+    </div>
+    
+    
+
+  </header>
+
+  <section id="post-content" class="article-content post">
+    <blockquote>
+<p>作为一名开发工程师，总有一点点（geek）想搞事的心思。而对于我而言，喜欢研究一些黑魔法，并且在适时的时候向别人炫技。当用到一些不满意的app功能时，总想着把这些功能改掉（或者去掉）来满足自己需求，更甚至可以debug别人的app。如果你对上述内容感兴趣，那就看下去，绝对不会让你失望。</p>
+</blockquote>
+<img src="/2016/10/22/手把手教你改写别人的app/1.jpg" alt="1.jpg" title="">
+<h1 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h1><p>自从微信出了<strong>消息撤回</strong>之后，有时候跟一些比较在意的人聊天的时候，就会遇到消息被撤回。然而内心是非常想看到这些消息的，此时就非常非常无奈，如果能把撤回的消息找回来，或者干脆把撤回消息直接给弄没了，那真是太好了。</p>
+<p>于是乎就动手做了一些操作，满足了自己的心愿。  </p>
+<p>但是我可不敢把搞微信的过程给放出来的，只能另搞一个demo来讲述改写的过程。</p>
+<h1 id="前戏"><a href="#前戏" class="headerlink" title="前戏"></a>前戏</h1><p>首先，我们先撸一个待破解的app。</p>
+<img src="/2016/10/22/手把手教你改写别人的app/2.png" alt="2.png" title="">
+<p>为了展示方便，撸一个最简单的，并写了方法<code>testFunction</code>，后期就是要破解这个方法。<br>然后将这个app打包，产生如图所示的<code>.ipa</code>文件。  </p>
+<img src="/2016/10/22/手把手教你改写别人的app/3.png" alt="3.png" title="">
+<p><strong>注意，由于我没有上传到app store，所以不需要砸壳（app store会加壳，我们也可以破壳，详情见我另一篇<a href="http://www.jianshu.com/p/10873c5c1e08" target="_blank" rel="external">文章</a>），只能修改没有壳的app。</strong></p>
+<h1 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h1><p><strong>所谓改写别人的app，无非就是想把一些功能点替换或者去掉。</strong>而功能点必然是由方法实现的，所以到了代码这层，就是<strong>将我们写的方法替换掉原来的方法</strong>。那如何做到去掉这个功能呢？同理，我们实现一个空方法，然后替换掉原来的方法即可。</p>
+<p>而眼前改写这个app的目的很简单，将上述的<code>testFunction</code>方法换成我们想要执行的方法（对于我想去掉微信撤回消息的功能就相当于拿个空方法替换掉相应方法）。</p>
+<p>OK，很多人会说，这个demo是你自己写的，你当然知道该替换哪个方法了。<strong>那你怎么去定位到想破解的app对应的功能点是哪个方法呢？</strong></p>
+<p>这是一个好问题，我们怎么去定位方法呢？答案是猜。</p>
+<p>当然并不是乱猜，我们可以class-dump想改写的app（教程上面提到的文章有），拿到所有类和对应方法，然后根据类名和方法名去猜，当然猜的过程运气好，一下就命中了，如果运气不好，那就多点耐心吧。</p>
+<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><p><a href="https://github.com/kuailejim/demo/tree/master/HackAppDemo" target="_blank" rel="external">demo下载地址</a><br>我们只有<code>.ipa</code>文件，那么可选择的路就很少了，原理实际上很简单。</p>
+<p>首先，创建一个伪工程，然后将.ipa解包，拿出<code>HackAppDemo.app</code>文件。这个文件的作用是我们需要欺骗Xcode，让它把这个作为执行文件而非我们实际工程产出的东东。</p>
+<p>其次，如何将我们的代码注入到改写的app里呢？分为两个思路，静态库和动态库。</p>
+<p><strong>静态库是无解的，因为我们没法去改变已经生成好的二进制mach-o文件。那么解决办法只剩下一个了，只能去撸一个动态库挂载上去。</strong></p>
+<p><strong>换句话说，这个工程的作用是欺骗Xcode，让其run需要改写的app，并且注入我们写好的动态库。</strong></p>
+<img src="/2016/10/22/手把手教你改写别人的app/4.png" alt="4.png" title="">
+<p>这一切怎么做到的呢？细看工程里的两个脚本。</p>
+<img src="/2016/10/22/手把手教你改写别人的app/5.png" alt="5.png" title="">
+<p>第一个脚本的作用是欺骗Xcode脚本（<strong>重签名，替换包</strong>）<br>另一个是利用<code>optool</code>工具注入我们写的动态库</p>
+<p><strong>这里需要注意的是，我们需要将伪工程的Bundle ID改为要改写的Bundle ID，否则会报错。</strong></p>
+<p>OK，接下来就比较容易了。我们在动态库里写个类，然后写个<code>+load</code>方法，在里面进行<code>method swizzling</code>即可。代码如下：</p>
+<img src="/2016/10/22/手把手教你改写别人的app/6.png" alt="6.png" title="">
+<p>OK，事情都做完了，让我们跑起工程，看看前后的结果吧。</p>
+<img src="/2016/10/22/手把手教你改写别人的app/7.png" alt="7.png" title="">
+<img src="/2016/10/22/手把手教你改写别人的app/8.png" alt="8.png" title="">
+<p>至此，改写结束。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p><strong>改写别人的app，只需要拿到破壳后的.app文件，然后建个伪工程，欺骗Xcode执行拿到的.app文件，并且注入我们写的动态库即可。</strong></p>
+<p>然后，这篇文章的目的是学习，而不是怂恿大家去随意破解别人的app。</p>
+<p>事实上市面上已经出现很多相同的app（原理相同），亦或是为了私利去破坏一些平衡性的东西。这些都是要<strong>承担法律责任</strong>的。</p>
+<p>作为开发者，我们需要给这个生态一个美好的环境。</p>
+
+  </section>
+
+  
+  
+
+<section class="post-comments">
+
+    <div class="ds-thread" data-thread-key="2016/10/22/手把手教你改写别人的app/"></div>
+
+    <script type="text/javascript">
+      var duoshuoQuery = {short_name:"kuailejim"};
+      (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+        || document.getElementsByTagName('body')[0]).appendChild(ds);
+      })();
+    </script> 
+
+</section>
+
+
+</article>
+
+
+            <footer class="footer">
+
+    <span class="footer__copyright">Stay Hungry, Stay Foolish.</span>
+    
+</footer>
+        </div>
+    </div>
+
+    <!-- js files -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/scale.fix.js"></script>
+    
+
+    
+
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript"> 
+        $(document).ready(function(){
+            MathJax.Hub.Config({ 
+                tex2jax: {inlineMath: [['[latex]','[/latex]'], ['\\(','\\)']]} 
+            });
+        });
+    </script>
+
+
+    
+
+    <script src="/js/awesome-toc.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.awesome_toc({
+                overlay: true,
+                contentId: "post-content",
+            });
+        });
+    </script>
+
+
+    <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?2b50d7b664b2132aabe06c346fad3696";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+    
+
+    <script src="/js/jquery.githubRepoWidget.min.js"></script>
+
+
+    <!--kill ie6 -->
+<!--[if IE 6]>
+  <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
+<![endif]-->
+
+</body>
+</html>
